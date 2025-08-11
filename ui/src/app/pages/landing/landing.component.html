@@ -1,0 +1,52 @@
+<div [ngClass]="currentTheme" class="w-full h-screen overflow-hidden">
+  <img
+    srcset="
+      /landing-page/space_500.webp   500w,
+      /landing-page/space_1000.webp 1000w,
+      /landing-page/space_2000.webp 2000w,
+      /landing-page/space_4000.webp 4000w
+    "
+    src="/landing-page/space_2000.webp"
+    alt="Space Background"
+    class="absolute w-full h-full object-cover z-0"
+  />
+
+  <div class="absolute inset-0 z-10 flex flex-col w-full">
+    <app-landing-header
+      class="text-neutral-content"
+      (currentThemeChange)="currentTheme = $event"
+    ></app-landing-header>
+
+    <div class="grow flex justify-center items-center">
+      <div class="container mx-auto mb-14 px-4 text-center">
+        <h1 class="text-8xl font-bold pb-5 text-neutral-content">
+          MEAN Template
+        </h1>
+        <p class="text-2xl py-3 text-neutral-content">
+          MEAN stack development template to ship faster.
+        </p>
+
+        <!-- Source Code Button -->
+        <div class="flex justify-center gap-5">
+          <div class="py-2">
+            <button class="btn btn-primary text" (click)="onGetSourceCode()">
+              Source Code
+            </button>
+          </div>
+
+          <!-- App Button -->
+          <div class="py-2">
+            <button class="btn btn-primary text" (click)="onApp()">
+              App
+              <i-lucide [img]="ArrowRight" class="w-5 h-5"></i-lucide>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full">
+      <app-landing-footer class="text-neutral-content"></app-landing-footer>
+    </div>
+  </div>
+</div>

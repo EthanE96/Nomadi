@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug API",
+      "program": "${workspaceFolder}/api/src/server.ts",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "cwd": "${workspaceFolder}/api",
+      "skipFiles": ["<node_internals>/**"],
+      "console": "internalConsole",
+      "outputCapture": "std"
+    },
+    {
+      "name": "SWA: Run ui",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:4280",
+      "preLaunchTask": "swa: start ui",
+      "webRoot": "${workspaceFolder}/ui",
+      "timeout": 30000
+    }
+  ]
+}
