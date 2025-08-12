@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-   <img src="docs/docs/images/xxx" alt="Travel App " width="80"/>
+   <img src="docs/docs/images/xxx" alt="Nomadi" width="80"/>
 </p>
 
 <p align="center">Nomad travel and trip planner application.</p>
