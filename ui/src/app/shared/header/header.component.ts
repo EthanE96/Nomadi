@@ -1,14 +1,12 @@
-import { NgIf } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { ThemeComponent } from '../theme/theme.component';
-import { LucideAngularModule, PanelLeftOpen, Settings } from 'lucide-angular';
 import { IUser } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [LucideAngularModule, NgIf],
+  imports: [RouterLink],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
@@ -16,11 +14,6 @@ export class HeaderComponent {
   private themeComponent = inject(ThemeComponent);
   private authService = inject(AuthService);
 
-  readonly PanelLeftOpen = PanelLeftOpen;
-  readonly Settings = Settings;
-
-  @Input() isDrawerOpen: boolean = true;
-  @Output() isDrawerOpenChange = new EventEmitter();
   @Output() currentThemeChange = new EventEmitter();
 
   currentUser: Partial<IUser> | null = null;
@@ -33,10 +26,6 @@ export class HeaderComponent {
     this.logo = this.themeComponent.logo;
   }
 
-  onDrawerChange() {
-    this.isDrawerOpen = !this.isDrawerOpen;
-    this.isDrawerOpenChange.emit(this.isDrawerOpen);
-  }
   // Might move to settings component
   onThemeToggle() {
     this.currentTheme = this.themeComponent.toggleTheme();
