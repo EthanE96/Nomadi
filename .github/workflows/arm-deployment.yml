@@ -1,71 +1,71 @@
-name: Azure ARM Deployment
+# name: Azure ARM Deployment
 
-on:
-  workflow_dispatch:
-    inputs:
-      AZURE_RG:
-        description: "Azure Resource Group"
-        required: true
-        default: "MEAN_Template"
-      folder:
-        description: "ARM deployment folder path (e.g. infra/individual/100-SWA-UI)"
-        required: true
-        default: "infra/individual/100-SWA-UI"
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       AZURE_RG:
+#         description: "Azure Resource Group"
+#         required: true
+#         default: "MEAN_Template"
+#       folder:
+#         description: "ARM deployment folder path (e.g. infra/individual/100-SWA-UI)"
+#         required: true
+#         default: "infra/individual/100-SWA-UI"
 
-permissions:
-  id-token: write
-  contents: read
+# permissions:
+#   id-token: write
+#   contents: read
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    env:
-      AZURE_RG: ${{ github.event.inputs.AZURE_RG }}
-      TEMPLATE: ${{ format('{0}/azuredeploy.json', github.event.inputs.folder) }}
-      PARAMETERS_FILE: ${{ format('{0}/parameters.json', github.event.inputs.folder) }}
-      MGMT_STORAGE_ACCOUNT: mgmt1storage
-      MGMT_STORAGE_CONTAINER: arm-templates
-      AZURE_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURE_MGMT_MI).subscriptionId }}
-    steps:
-      # Checkout code
-      - uses: actions/checkout@main
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     env:
+#       AZURE_RG: ${{ github.event.inputs.AZURE_RG }}
+#       TEMPLATE: ${{ format('{0}/azuredeploy.json', github.event.inputs.folder) }}
+#       PARAMETERS_FILE: ${{ format('{0}/parameters.json', github.event.inputs.folder) }}
+#       MGMT_STORAGE_ACCOUNT: mgmt1storage
+#       MGMT_STORAGE_CONTAINER: arm-templates
+#       AZURE_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURE_MGMT_MI).subscriptionId }}
+#     steps:
+#       # Checkout code
+#       - uses: actions/checkout@main
 
-      # Log into Azure using Managed Identity (federated credentials)
-      - uses: azure/login@v2
-        with:
-          client-id: ${{ fromJson(secrets.AZURE_MGMT_MI).clientId }}
-          tenant-id: ${{ fromJson(secrets.AZURE_MGMT_MI).tenantId }}
-          subscription-id: ${{ fromJson(secrets.AZURE_MGMT_MI).subscriptionId }}
+#       # Log into Azure using Managed Identity (federated credentials)
+#       - uses: azure/login@v2
+#         with:
+#           client-id: ${{ fromJson(secrets.AZURE_MGMT_MI).clientId }}
+#           tenant-id: ${{ fromJson(secrets.AZURE_MGMT_MI).tenantId }}
+#           subscription-id: ${{ fromJson(secrets.AZURE_MGMT_MI).subscriptionId }}
 
-      # Upload nested ARM template to blob storage
-      - name: Upload Nested ARM template
-        run: |
-          for f in infra/nestedTemplates/*.json; do
-            fname=$(basename "$f")
-            az storage blob upload \
-              --account-name ${{ env.MGMT_STORAGE_ACCOUNT }} \
-              --container-name ${{ env.MGMT_STORAGE_CONTAINER }} \
-              --file "$f" \
-              --name "$fname" \
-              --overwrite \
-              --auth-mode login
-          done
-        shell: bash
+#       # Upload nested ARM template to blob storage
+#       - name: Upload Nested ARM template
+#         run: |
+#           for f in infra/nestedTemplates/*.json; do
+#             fname=$(basename "$f")
+#             az storage blob upload \
+#               --account-name ${{ env.MGMT_STORAGE_ACCOUNT }} \
+#               --container-name ${{ env.MGMT_STORAGE_CONTAINER }} \
+#               --file "$f" \
+#               --name "$fname" \
+#               --overwrite \
+#               --auth-mode login
+#           done
+#         shell: bash
 
-      # Deploy ARM template
-      - name: Run ARM deploy
-        uses: azure/bicep-deploy@v2
-        with:
-          type: deployment
-          operation: create
-          name: ${{ env.AZURE_RG }}-deployment
-          scope: resourceGroup
-          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resource-group-name: ${{ env.AZURE_RG }}
-          template-file: ${{ env.TEMPLATE }}
-          parameters-file: ${{ env.PARAMETERS_FILE }}
+#       # Deploy ARM template
+#       - name: Run ARM deploy
+#         uses: azure/bicep-deploy@v2
+#         with:
+#           type: deployment
+#           operation: create
+#           name: ${{ env.AZURE_RG }}-deployment
+#           scope: resourceGroup
+#           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+#           resource-group-name: ${{ env.AZURE_RG }}
+#           template-file: ${{ env.TEMPLATE }}
+#           parameters-file: ${{ env.PARAMETERS_FILE }}
 
-      - name: Print Deployment Outputs
-        run: |
-          echo "intOutput: ${{ steps.deployment.outputs.intOutput }}"
-          echo "stringOutput: ${{ steps.deployment.outputs.stringOutput }}"
+#       - name: Print Deployment Outputs
+#         run: |
+#           echo "intOutput: ${{ steps.deployment.outputs.intOutput }}"
+#           echo "stringOutput: ${{ steps.deployment.outputs.stringOutput }}"

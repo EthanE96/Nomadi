@@ -1,8 +1,8 @@
-# Copilot Instructions for MEAN_Template
+# Copilot Instructions for Travel_App
 
 ## Project Overview
 
-- **MEAN_Template** is a modular, production-focused SaaS starter using the MEAN stack (MongoDB, Express, Angular, Node.js) with Azure-first infrastructure.
+- **Travel_App** is a modular, production-focused SaaS starter using the MEAN stack (MongoDB, Express, Angular, Node.js) with Azure-first infrastructure.
 - The repo is split into:
   - `api/`: Node.js/Express REST API (TypeScript)
   - `ui/`: Angular frontend (Angular 18+; Tailwind, DaisyUI; feature-based structure)

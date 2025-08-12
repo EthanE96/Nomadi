@@ -1,98 +1,98 @@
-name: Mean API Image to GHCR
+# name: Mean API Image to GHCR
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - "api/**"
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - "api/**"
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: mean-api
+# env:
+#   REGISTRY: ghcr.io
+#   IMAGE_NAME: mean-api
 
-jobs:
-  build-and-push-stage:
-    name: Build and Publish Stage
-    runs-on: ubuntu-latest
-    environment: Staging
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
+# jobs:
+#   build-and-push-stage:
+#     name: Build and Publish Stage
+#     runs-on: ubuntu-latest
+#     environment: Staging
+#     permissions:
+#       contents: read
+#       packages: write
+#       id-token: write
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
-      - name: Downcase Image Name and Repository
-        run: |
-          echo "IMAGE_NAME=${GITHUB_REPOSITORY@L}/mean-api" >> "${GITHUB_ENV}"
+#       - name: Downcase Image Name and Repository
+#         run: |
+#           echo "IMAGE_NAME=${GITHUB_REPOSITORY@L}/mean-api" >> "${GITHUB_ENV}"
 
-      - name: Log in to the Github Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Log in to the Github Container Registry
+#         uses: docker/login-action@v3
+#         with:
+#           registry: ${{ env.REGISTRY }}
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate metadata for Docker image
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=raw,value=latest
-            type=raw,value=staging
-            type=sha
+#       - name: Generate metadata for Docker image
+#         id: meta
+#         uses: docker/metadata-action@v5
+#         with:
+#           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#           tags: |
+#             type=raw,value=latest
+#             type=raw,value=staging
+#             type=sha
 
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./api
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
+#       - name: Build and push Docker image
+#         id: push
+#         uses: docker/build-push-action@v5
+#         with:
+#           context: ./api
+#           push: true
+#           tags: ${{ steps.meta.outputs.tags }}
 
-  build-and-push-prod:
-    name: Build and Publish Production
-    runs-on: ubuntu-latest
-    environment: Production
-    needs: build-and-push-stage
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
+#   build-and-push-prod:
+#     name: Build and Publish Production
+#     runs-on: ubuntu-latest
+#     environment: Production
+#     needs: build-and-push-stage
+#     permissions:
+#       contents: read
+#       packages: write
+#       id-token: write
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
-      - name: Downcase Image Name and Repository
-        run: |
-          echo "IMAGE_NAME=${GITHUB_REPOSITORY@L}/mean-api" >> "${GITHUB_ENV}"
+#       - name: Downcase Image Name and Repository
+#         run: |
+#           echo "IMAGE_NAME=${GITHUB_REPOSITORY@L}/mean-api" >> "${GITHUB_ENV}"
 
-      - name: Log in to the Github Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Log in to the Github Container Registry
+#         uses: docker/login-action@v3
+#         with:
+#           registry: ${{ env.REGISTRY }}
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate metadata for Docker image
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=raw,value=latest
-            type=raw,value=production
-            type=sha
+#       - name: Generate metadata for Docker image
+#         id: meta
+#         uses: docker/metadata-action@v5
+#         with:
+#           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#           tags: |
+#             type=raw,value=latest
+#             type=raw,value=production
+#             type=sha
 
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./api
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
+#       - name: Build and push Docker image
+#         id: push
+#         uses: docker/build-push-action@v5
+#         with:
+#           context: ./api
+#           push: true
+#           tags: ${{ steps.meta.outputs.tags }}
