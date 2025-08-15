@@ -55,7 +55,11 @@
         </button>
 
         <!-- Delete Button -->
-        <button class="btn btn-sm btn-square btn-ghost" title="Delete">
+        <button
+          class="btn btn-sm btn-square btn-ghost"
+          title="Delete"
+          (click)="onTripDelete(trip.id); $event.stopPropagation()"
+        >
           <i-lucide [img]="deleteIcon" class="icon w-4 h-4"></i-lucide>
         </button>
       </div>

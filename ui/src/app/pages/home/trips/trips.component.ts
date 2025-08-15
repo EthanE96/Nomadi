@@ -27,7 +27,11 @@ export class TripsComponent {
 
   onTripCreate() {
     console.log('Trip created');
-
     this.messageComponent?.onMessage('Trip created successfully!', 'success');
+  }
+
+  onTripDelete(tripId: string) {
+    console.log(`Trip deleted: ${tripId}`);
+    this.messageComponent?.onMessage('Trip deleted successfully!', 'success');
   }
 }

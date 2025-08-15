@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 import {
   LucideAngularModule,
   Info,
-  Check,
-  FileWarning,
-  EraserIcon,
+  CircleCheck,
+  TriangleAlert,
+  Ban,
 } from 'lucide-angular';
 
 @Component({
@@ -15,14 +15,14 @@ import {
 })
 export class MessageComponent {
   readonly infoIcon = Info;
-  readonly successIcon = Check;
-  readonly warningIcon = FileWarning;
-  readonly errorIcon = EraserIcon;
+  readonly successIcon = CircleCheck;
+  readonly warningIcon = TriangleAlert;
+  readonly errorIcon = Ban;
 
   isMessage = false;
   message: string = 'There was an error processing your request.';
   type: 'info' | 'success' | 'warning' | 'error' = 'error';
-  width = 'w-1/2';
+  width = 'w-5/6';
 
   /**
    * Displays a message with a specified type and width, and automatically clears it after a timeout.
