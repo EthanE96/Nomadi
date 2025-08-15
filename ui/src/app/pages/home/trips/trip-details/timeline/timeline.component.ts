@@ -13,11 +13,11 @@ export class TimelineComponent {
   readonly refreshIcon = RotateCcw;
   readonly pencilIcon = Pencil;
   private tripStoreService = inject(TripStoreService);
-  private messageComponent = inject(MessageComponent);
 
   @Input() trip?: Trip;
   @ViewChild('editModal') editModal?: ElementRef<HTMLDialogElement>;
   @ViewChild('generateModal') generateModal?: ElementRef<HTMLDialogElement>;
+  @ViewChild(MessageComponent) messageComponent?: MessageComponent;
 
   selectedEvent?: TripEvent;
 
@@ -40,7 +40,10 @@ export class TimelineComponent {
     this.selectedEvent.description = value;
     this.tripStoreService.updateTripEvent(this.trip.id, this.selectedEvent.id, value);
 
-    this.messageComponent.onMessage('Event description updated successfully!', 'success');
+    this.messageComponent?.onMessage(
+      'Event description updated successfully!',
+      'success'
+    );
   }
 
   onGenerateDescription(event: Event) {
@@ -53,7 +56,7 @@ export class TimelineComponent {
     this.selectedEvent.description = value;
     this.tripStoreService.updateTripEvent(this.trip.id, this.selectedEvent.id, value);
 
-    this.messageComponent.onMessage(
+    this.messageComponent?.onMessage(
       'Event description generated successfully!',
       'success'
     );

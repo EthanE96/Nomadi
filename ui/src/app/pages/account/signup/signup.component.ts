@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -26,7 +26,8 @@ export class SignupComponent implements OnInit {
   private authService = inject(AuthService);
   private theme = inject(ThemeComponent);
   private router = inject(Router);
-  private messageComponent = inject(MessageComponent);
+
+  @ViewChild(MessageComponent) messageComponent?: MessageComponent;
 
   logo: string;
   currentStep: number = 1;
@@ -52,6 +53,6 @@ export class SignupComponent implements OnInit {
   }
 
   handleErrorChange(error: string) {
-    this.messageComponent.onMessage(error, 'error');
+    this.messageComponent?.onMessage(error, 'error');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IUser } from '../../../models/user.model';
@@ -16,7 +16,8 @@ import { isValidEmail, isValidFields } from '../../../utils/validator.utils';
 export class ProfileComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
-  private messageComponent = inject(MessageComponent);
+
+  @ViewChild(MessageComponent) messageComponent?: MessageComponent;
 
   user: Partial<IUser> | null = null;
 
@@ -68,10 +69,10 @@ export class ProfileComponent implements OnInit {
 
   handleErrorChange(error: unknown) {
     error = ErrorType(error);
-    this.messageComponent.onMessage(error as string, 'error');
+    this.messageComponent?.onMessage(error as string, 'error');
   }
 
   handleSuccessChange(mssg: string) {
-    this.messageComponent.onMessage(mssg, 'success');
+    this.messageComponent?.onMessage(mssg, 'error');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { ThemeComponent } from '../../../shared/theme/theme.component';
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   private theme = inject(ThemeComponent);
   private router = inject(Router);
   private authService = inject(AuthService);
-  private messageComponent = inject(MessageComponent);
+  @ViewChild(MessageComponent) messageComponent?: MessageComponent;
 
   logo: string;
   email: string = '';
@@ -72,6 +72,6 @@ export class LoginComponent implements OnInit {
 
   handleErrorChange(error?: unknown) {
     error = ErrorType(error);
-    this.messageComponent.onMessage(error as string, 'error');
+    this.messageComponent?.onMessage(error as string, 'error');
   }
 }
