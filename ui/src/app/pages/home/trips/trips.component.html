@@ -1,68 +1,70 @@
 <div class="container mx-auto p-2 px-5 bg-base-200 min-h-screen">
-  <h1 class="text-2xl font-bold mb-4 mx-1">Trips</h1>
+  <div class="flex items-center justify-between mb-3 pt-2 mx-1">
+    <!-- Trips -->
+    <h1 class="text-2xl font-bold">Trips</h1>
+
+    <!-- Create Button -->
+    <button class="btn btn-ghost btn-square" (click)="onTripCreate()">
+      <i-lucide [img]="plusIcon" class="icon w-5 h-5"></i-lucide>
+    </button>
+  </div>
 
   <ul class="list bg-base-100 rounded-box shadow-md">
-    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
-      Upcoming and recent trips
-    </li>
+    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Upcoming and recent trips</li>
 
-    <!-- Trip 1 -->
-    <li class="list-row">
+    @for (trip of trips(); track trip.id) {
+    <li
+      class="list-row"
+      (click)="onTripDetails(trip.id)"
+      (keydown.enter)="onTripDetails(trip.id)"
+      tabindex="0"
+      role="button"
+    >
+      <!-- Icon -->
       <div>
-        <div
-          class="size-10 rounded-full bg-primary text-base-100 flex items-center justify-center font-bold"
-        >
-          NYC
+        <div class="size-10 rounded-full bg-primary text-base-100 flex items-center justify-center font-bold">
+          {{ trip.code }}
         </div>
       </div>
+
+      <!-- Header -->
       <div>
-        <div>New York, USA</div>
-        <div class="text-xs uppercase font-semibold opacity-60">
-          2024-07-01 - 2024-07-10
-        </div>
+        <div>{{ trip.city }}</div>
+        <div class="text-xs uppercase font-semibold opacity-60">{{ trip.dates }}</div>
       </div>
+
+      <!-- Description -->
       <p class="list-col-wrap text-xs">
-        Explore the vibrant city life, iconic landmarks, and diverse cuisine of
-        New York City.
+        Explore the vibrant city life, iconic landmarks, and diverse cuisine of New York City.
       </p>
-      <button class="btn btn-square btn-ghost" title="Share">
-        <svg
-          class="size-[1.2em]"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
+
+      <!-- Actions -->
+      <div class="flex items-center mx-auto">
+        <!-- TODO: Implement Share Feature -->
+        <!-- <button class="btn btn-sm btn-square btn-ghost" title="Share">
+          <i-lucide [img]="shareIcon" class="icon w-4 h-4"></i-lucide>
+        </button> -->
+
+        <!-- More Details Button -->
+        <button
+          class="btn btn-sm btn-square btn-ghost"
+          title="More details"
+          (click)="onTripDetails(trip.id); $event.stopPropagation()"
         >
-          <g
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            stroke-width="2"
-            fill="none"
-            stroke="currentColor"
-          >
-            <path d="M15 8a3 3 0 1 0-6 0v4a3 3 0 1 0 6 0V8z"></path>
-            <path d="M12 3v5"></path>
-            <path d="M12 16v5"></path>
-          </g>
-        </svg>
-      </button>
-      <button class="btn btn-square btn-ghost" title="More details">
-        <svg
-          class="size-[1.2em]"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-        >
-          <g
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            stroke-width="2"
-            fill="none"
-            stroke="currentColor"
-          >
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 16v-4"></path>
-            <path d="M12 8h.01"></path>
-          </g>
-        </svg>
-      </button>
+          <i-lucide [img]="infoIcon" class="icon w-4 h-4"></i-lucide>
+        </button>
+
+        <!-- Delete Button -->
+        <button class="btn btn-sm btn-square btn-ghost" title="Delete">
+          <i-lucide [img]="deleteIcon" class="icon w-4 h-4"></i-lucide>
+        </button>
+      </div>
     </li>
+    } @empty {
+
+    <li class="p-4 text-center text-gray-500">No trips found. Start planning your next adventure!</li>
+    }
   </ul>
 </div>
+
+<app-message></app-message>

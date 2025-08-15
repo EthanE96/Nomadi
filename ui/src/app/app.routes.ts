@@ -8,6 +8,7 @@ import { NotFoundComponent } from './pages/errors/not-found/not-found.component'
 import { ForgotPasswordComponent } from './pages/account/forgot-password/forgot-password.component';
 import { ProfileComponent } from './pages/home/profile/profile.component';
 import { TripsComponent } from './pages/home/trips/trips.component';
+import { TripDetailsComponent } from './pages/home/trips/trip-details/trip-details.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -21,7 +22,9 @@ export const routes: Routes = [
     component: HomeComponent,
     canActivate: [authGuard],
     children: [
-      { path: '', component: TripsComponent },
+      { path: '', redirectTo: 'trips', pathMatch: 'full' },
+      { path: 'trips', component: TripsComponent },
+      { path: 'trips/details/:id', component: TripDetailsComponent },
       { path: 'profile', component: ProfileComponent },
     ],
   },

@@ -16,10 +16,9 @@ import { isValidEmail, isValidFields } from '../../../utils/validator.utils';
 export class ProfileComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private messageComponent = inject(MessageComponent);
 
   user: Partial<IUser> | null = null;
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
 
   ngOnInit() {
     this.user = this.authService.currentUserSubject.value;
@@ -32,9 +31,7 @@ export class ProfileComponent implements OnInit {
       }
 
       // Validate all fields
-      if (
-        !isValidFields(this.user.firstName, this.user.lastName, this.user.email)
-      ) {
+      if (!isValidFields(this.user.firstName, this.user.lastName, this.user.email)) {
         throw new Error('Missing fields.');
       }
 
@@ -70,18 +67,11 @@ export class ProfileComponent implements OnInit {
   }
 
   handleErrorChange(error: unknown) {
-    this.errorMessage = ErrorType(error);
-
-    setTimeout(() => {
-      this.errorMessage = '';
-    }, 3000);
+    error = ErrorType(error);
+    this.messageComponent.onMessage(error as string, 'error');
   }
 
   handleSuccessChange(mssg: string) {
-    this.successMessage = mssg;
-
-    setTimeout(() => {
-      this.successMessage = '';
-    }, 3000);
+    this.messageComponent.onMessage(mssg, 'success');
   }
 }

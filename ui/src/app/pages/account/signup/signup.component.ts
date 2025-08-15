@@ -26,10 +26,10 @@ export class SignupComponent implements OnInit {
   private authService = inject(AuthService);
   private theme = inject(ThemeComponent);
   private router = inject(Router);
+  private messageComponent = inject(MessageComponent);
 
   logo: string;
   currentStep: number = 1;
-  error?: string;
 
   constructor() {
     this.logo = this.theme.logo;
@@ -52,10 +52,6 @@ export class SignupComponent implements OnInit {
   }
 
   handleErrorChange(error: string) {
-    this.error = error;
-
-    setTimeout(() => {
-      this.error = undefined;
-    }, 5500);
+    this.messageComponent.onMessage(error, 'error');
   }
 }

@@ -2,8 +2,8 @@
   <!-- Header -->
   <app-landing-header></app-landing-header>
 
-  <div *ngIf="error" class="container mx-auto w-3/4 py-3 inline">
-    <app-message [message]="error" type="error"></app-message>
+  <div class="container mx-auto w-3/4 py-3 inline">
+    <app-message></app-message>
   </div>
 
   <!-- Main Content -->
@@ -26,11 +26,7 @@
             <div class="flex flex-col gap-4">
               <!-- Email -->
               <div>
-                <label
-                  class="label text-base py-1 text-neutral-content"
-                  for="emailInput"
-                  >Email</label
-                >
+                <label class="label text-base py-1 text-neutral-content" for="emailInput">Email</label>
                 <input
                   id="emailInput"
                   type="email"
@@ -39,17 +35,11 @@
                   [(ngModel)]="email"
                   name="email"
                 />
-                <div class="validator-hint hidden">
-                  Enter valid email address
-                </div>
+                <div class="validator-hint hidden">Enter valid email address</div>
               </div>
               <!-- Password -->
               <div>
-                <label
-                  class="label text-base py-1 text-neutral-content"
-                  for="passwordInput"
-                  >Password</label
-                >
+                <label class="label text-base py-1 text-neutral-content" for="passwordInput">Password</label>
                 <input
                   id="passwordInput"
                   type="password"
@@ -71,9 +61,7 @@
                     [(ngModel)]="rememberMe"
                     name="rememberMe"
                   />
-                  <label for="rememberMe" class="text-sm text-neutral-content"
-                    >Remember me</label
-                  >
+                  <label for="rememberMe" class="text-sm text-neutral-content">Remember me</label>
                 </div>
 
                 <!-- Forgot Password -->
@@ -84,13 +72,7 @@
                 > -->
               </div>
 
-              <button
-                (click)="loginWithLocal()"
-                type="submit"
-                class="btn btn-primary my-2 mb-2"
-              >
-                Login
-              </button>
+              <button (click)="loginWithLocal()" type="submit" class="btn btn-primary my-2 mb-2">Login</button>
             </div>
           </form>
 
@@ -98,28 +80,14 @@
 
           <div class="flex flex-row gap-2 items-center justify-center">
             <!-- Google Login -->
-            <button
-              class="flex-grow btn btn-neutral mt-2"
-              (click)="loginWithGoogle()"
-            >
-              <img
-                class="w-5 h-5"
-                src="/auth-logos/google.png"
-                alt="Google Logo"
-              />
+            <button class="flex-grow btn btn-neutral mt-2" (click)="loginWithGoogle()">
+              <img class="w-5 h-5" src="/auth-logos/google.png" alt="Google Logo" />
               Google
             </button>
 
             <!-- Github Login -->
-            <button
-              class="flex-grow btn btn-neutral mt-2"
-              (click)="loginWithGithub()"
-            >
-              <img
-                class="w-5 h-5"
-                src="/auth-logos/github-mark-white.png"
-                alt="Github Logo"
-              />
+            <button class="flex-grow btn btn-neutral mt-2" (click)="loginWithGithub()">
+              <img class="w-5 h-5" src="/auth-logos/github-mark-white.png" alt="Github Logo" />
               Github
             </button>
           </div>

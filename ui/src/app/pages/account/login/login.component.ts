@@ -6,7 +6,6 @@ import { LandingHeaderComponent } from '../../landing/landing-header/landing-hea
 import { LandingFooterComponent } from '../../landing/landing-footer/landing-footer.component';
 import { RouterLink, Router } from '@angular/router';
 import { MessageComponent } from '../../../shared/message/message.component';
-import { NgIf } from '@angular/common';
 import { isValidEmail, isValidFields } from '../../../utils/validator.utils';
 import ErrorType from '../../../utils/error-type.utils';
 
@@ -15,7 +14,6 @@ import ErrorType from '../../../utils/error-type.utils';
   standalone: true,
   imports: [
     FormsModule,
-    NgIf,
     RouterLink,
     LandingHeaderComponent,
     LandingFooterComponent,
@@ -27,12 +25,12 @@ export class LoginComponent implements OnInit {
   private theme = inject(ThemeComponent);
   private router = inject(Router);
   private authService = inject(AuthService);
+  private messageComponent = inject(MessageComponent);
 
   logo: string;
   email: string = '';
   password: string = '';
   rememberMe: boolean = false;
-  error?: string;
 
   constructor() {
     this.logo = this.theme.logo;
@@ -63,11 +61,7 @@ export class LoginComponent implements OnInit {
       }
 
       // Login
-      await this.authService.loginWithLocal(
-        this.email,
-        this.password,
-        this.rememberMe
-      );
+      await this.authService.loginWithLocal(this.email, this.password, this.rememberMe);
 
       // Redirect to the app
       this.router.navigate(['/app']);
@@ -77,10 +71,7 @@ export class LoginComponent implements OnInit {
   }
 
   handleErrorChange(error?: unknown) {
-    this.error = ErrorType(error);
-
-    setTimeout(() => {
-      this.error = undefined;
-    }, 5500);
+    error = ErrorType(error);
+    this.messageComponent.onMessage(error as string, 'error');
   }
 }
