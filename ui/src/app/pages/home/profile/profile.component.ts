@@ -1,6 +1,4 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { IUser } from '../../../models/user.model';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
@@ -10,8 +8,9 @@ import { isValidEmail, isValidFields } from '../../../utils/validator.utils';
 
 @Component({
   selector: 'app-profile',
-  imports: [NgIf, FormsModule, MessageComponent],
+  imports: [],
   templateUrl: './profile.component.html',
+  styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
   private authService = inject(AuthService);
