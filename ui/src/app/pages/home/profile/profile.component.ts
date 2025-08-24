@@ -9,7 +9,6 @@ import { LucideAngularModule, Info } from 'lucide-angular';
   selector: 'app-profile',
   imports: [LucideAngularModule],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
   readonly infoIcon = Info;

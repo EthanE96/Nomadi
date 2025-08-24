@@ -1,38 +1,37 @@
 <div class="container mx-auto p-2 px-5">
   <!-- Header -->
   <div class="mb-3 pt-2 mx-1">
-    <h1 class="text-2xl font-bold mb-3 pt-2">Profile</h1>
+    <h1 class="text-2xl font-bold mb-3">Profile</h1>
     <p class="text-xs">
       This information is private and used only to personalize your trip recommendations. The more details you provide,
       the more accurate and helpful the suggestions will be.
     </p>
   </div>
 
-  <!-- ^Personal / Travel -->
-  <div class="bg-base-100 border-base-300 rounded-box border p-4 mb-3">
-    <h2 class="text-base font-semibold mb-4">Personal & Travel</h2>
+  <!-- ^ Personal / Travel -->
+  <div class="flex flex-col gap-4 bg-base-100 border-base-300 rounded-box shadow-md p-4 mb-6">
+    <h2 class="text-base font-semibold">Personal & Travel</h2>
 
     <!-- Personal & Travel: User Type -->
-    <div class="separateInput">
-      <div class="flex items-center justify-between gap-1 mb-2">
+    <div class="flex-1">
+      <div class="flex flex-row items-center justify-between mb-1.5">
         <h4 class="text-sm">User Type</h4>
-
         <div class="tooltip tooltip-left">
           <i-lucide [img]="infoIcon" class="icon w-4 h-4"></i-lucide>
           <div class="tooltip-content text-xs bg-neutral">
             <ul class="list-disc pl-2 text-left font-light text-neutral-content">
               <li class="m-2">
-                <span class="font-bold">Digital Nomad</span> — Work remotely while traveling frequently
+                <span class="font-bold">Digital Nomad</span> — Work remotely while traveling frequently.
               </li>
               <li class="m-2">
-                <span class="font-bold">Long-Term Traveler</span> — Extended trips, several months to years
+                <span class="font-bold">Long-Term Traveler</span> — Extended trips, several months to years.
               </li>
-              <li class="m-2"><span class="font-bold">Vacationer</span> — Short-term leisure trips</li>
+              <li class="m-2"><span class="font-bold">Vacationer</span> — Short-term leisure trips.</li>
             </ul>
           </div>
         </div>
       </div>
-      <select class="select select-sm select-bordered">
+      <select class="select select-sm w-full">
         <option disabled selected>Pick a user type</option>
         <option>Digital Nomad</option>
         <option>Long-Term Traveler</option>
@@ -41,16 +40,23 @@
     </div>
 
     <!-- Personal & Travel: Age -->
-    <div class="separateInput">
-      <h4 class="text-sm mb-2">Age</h4>
-      <input type="number" class="input input-sm validator" required placeholder="Insert your age" min="18" max="80" />
-      <p class="validator-hint">Age must be between be 18 to 80</p>
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Age</h4>
+      <input
+        type="number"
+        class="input input-sm validator w-full"
+        required
+        placeholder="Insert your age"
+        min="18"
+        max="80"
+      />
+      <p class="validator-hint hidden">Age must be between be 18 to 80</p>
     </div>
 
     <!-- Personal & Travel: Gender -->
-    <div class="separateInput">
-      <h4 class="text-sm mb-2">Gender</h4>
-      <select class="select select-sm select-bordered">
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Gender</h4>
+      <select class="select select-sm w-full">
         <option disabled selected>Select your gender</option>
         <option>Male</option>
         <option>Female</option>
@@ -59,22 +65,21 @@
     </div>
 
     <!-- Personal & Travel: Nationality / Passport -->
-    <div class="separateInput">
-      <h4 class="text-sm mb-2">Nationality / Passport</h4>
-      <input type="text" placeholder="Enter nationality or passport" class="input input-sm" />
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Nationality / Passport</h4>
+      <input type="text" placeholder="Enter nationality or passport" class="input input-sm w-full" />
     </div>
 
     <!-- Personal & Travel: Language -->
-    <div class="separateInput">
-      <h4 class="text-sm mb-2">Languages</h4>
-      <input type="text" placeholder="Enter your fluent languages" class="input input-sm" />
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Languages</h4>
+      <input type="text" placeholder="Enter your fluent languages" class="input input-sm w-full" />
     </div>
 
     <!-- Personal & Travel: Safety Level -->
-    <div class="separateInput">
-      <div class="flex items-center justify-between gap-1 mb-2">
+    <div class="flex-1">
+      <div class="flex flex-row items-center justify-between mb-1.5">
         <h4 class="text-sm">Safety Level</h4>
-
         <div class="tooltip tooltip-left">
           <i-lucide [img]="infoIcon" class="icon w-4 h-4"></i-lucide>
           <div class="tooltip-content text-xs bg-neutral">
@@ -97,8 +102,7 @@
           </div>
         </div>
       </div>
-
-      <select class="select select-sm select-bordered">
+      <select class="select select-sm w-full">
         <option disabled selected>Select your safety comfort level</option>
         <option value="low">Low Risk</option>
         <option value="moderate">Moderate Risk</option>
@@ -107,10 +111,9 @@
     </div>
 
     <!-- Personal & Travel: Travel Experience -->
-    <div class="separateInput">
-      <div class="flex items-center justify-between gap-1 mb-2">
+    <div class="flex-1">
+      <div class="flex items-center justify-between mb-1.5">
         <h4 class="text-sm">Travel Experience Level</h4>
-
         <div class="tooltip tooltip-left">
           <i-lucide [img]="infoIcon" class="icon w-4 h-4"></i-lucide>
           <div class="tooltip-content text-xs bg-neutral">
@@ -131,8 +134,7 @@
           </div>
         </div>
       </div>
-
-      <select class="select select-sm select-bordered">
+      <select class="select select-sm w-full">
         <option disabled selected>Select your experience level</option>
         <option value="beginner">Beginner</option>
         <option value="intermediate">Intermediate</option>
@@ -141,50 +143,53 @@
     </div>
 
     <!-- Personal & Travel: Additional Notes -->
-    <div class="separateInput">
-      <div class="flex items-center justify-between gap-1 mb-2">
+    <div class="flex-1">
+      <div class="flex items-center justify-between mb-1.5">
         <h4 class="text-sm">Additional Notes</h4>
-
         <div class="tooltip tooltip-left">
           <i-lucide [img]="infoIcon" class="icon w-4 h-4"></i-lucide>
           <div class="tooltip-content text-xs bg-neutral">
-            <p class="pl-2 text-left font-light text-neutral-content">
+            <p class="pl-2 text-left font-light text-neutral-content m-2">
               Any additional information about your travel preferences, accessibility needs, dietary restrictions, or
-              other relevant details...
+              other relevant details.
             </p>
           </div>
         </div>
       </div>
-
       <textarea
-        class="textarea textarea-sm textarea-bordered h-24"
-        placeholder="Any additional information about your travel preferences, accessibility needs, dietary restrictions, or other relevant details..."
+        class="textarea textarea-sm textarea-bordered h-24 w-full"
+        placeholder="Any additional information about your travel preferences, accessibility needs, dietary restrictions, or other relevant details."
       ></textarea>
     </div>
   </div>
 
   <!-- ^Interest & Activities -->
-  <div class="bg-base-100 border-base-300 rounded-box border p-4">
-    <div class="flex items-center justify-between gap-1 mb-2">
-      <h2 class="text-base font-semibold mb-1">Interest & Activities</h2>
+  <div class="flex flex-col gap-4 bg-base-100 border-base-300 rounded-box shadow-md p-4 mb-6">
+    <div class="flex flex-row items-center justify-between mb-1.5">
+      <h2 class="text-base font-semibold">Interest & Activities</h2>
 
+      <!-- Description -->
       <div class="tooltip tooltip-left">
         <i-lucide [img]="infoIcon" class="icon w-4 h-4"></i-lucide>
-        <div class="tooltip-content bg-neutral px-3 py-1.5">
-          <p class="text-xs">Rate each activity on a scale of 1-5:</p>
-          <ul class="text-xs list-disc pl-6 text-left mb-6">
-            <li>1 - Not interested</li>
-            <li>5 - Extremely interested</li>
+        <div class="tooltip-content text-xs bg-neutral">
+          <ul class="list-disc pl-2 text-left font-light text-neutral-content">
+            <li class="m-2"><span class="font-bold">1</span> — Not interested, will not recommend.</li>
+            <li class="m-2">
+              <span class="font-bold">3</span> — Some interest, open to suggestions but not a priority.
+            </li>
+            <li class="m-2">
+              <span class="font-bold">5</span> — Highly interested, should prioritize in recommendations.
+            </li>
           </ul>
         </div>
       </div>
     </div>
 
     <!-- Interest & Activities: Adventure -->
-    <div class="separateInput w-full max-w-xs">
-      <h4 class="text-sm mb-2">Adventure Level</h4>
-      <input type="range" min="0" max="100" value="25" class="range range-xs" step="25" />
-      <div class="flex justify-between px-2.5 mt-2 text-xs">
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Adventure Level</h4>
+      <input type="range" min="0" max="100" value="25" class="range range-xs w-full" step="25" />
+      <div class="flex justify-between px-2.5 text-xs">
         <span>1</span>
         <span>2</span>
         <span>3</span>
@@ -194,9 +199,9 @@
     </div>
 
     <!-- Interest & Activities: Culture & History -->
-    <div class="separateInput w-full max-w-xs">
-      <h4 class="text-sm mb-2">Culture & History</h4>
-      <input type="range" min="0" max="100" value="25" class="range range-xs" step="25" />
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Culture & History</h4>
+      <input type="range" min="0" max="100" value="25" class="range range-xs w-full" step="25" />
       <div class="flex justify-between px-2.5 mt-2 text-xs">
         <span>1</span>
         <span>2</span>
@@ -207,9 +212,9 @@
     </div>
 
     <!-- Interest & Activities: Food & Drink -->
-    <div class="separateInput w-full max-w-xs">
-      <h4 class="text-sm mb-2">Food & Drink</h4>
-      <input type="range" min="0" max="100" value="25" class="range range-xs" step="25" />
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Food & Drink</h4>
+      <input type="range" min="0" max="100" value="25" class="range range-xs w-full" step="25" />
       <div class="flex justify-between px-2.5 mt-2 text-xs">
         <span>1</span>
         <span>2</span>
@@ -220,9 +225,9 @@
     </div>
 
     <!-- Interest & Activities: City Life -->
-    <div class="separateInput w-full max-w-xs">
-      <h4 class="text-sm mb-2">City Life</h4>
-      <input type="range" min="0" max="100" value="25" class="range range-xs" step="25" />
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">City Life</h4>
+      <input type="range" min="0" max="100" value="25" class="range range-xs w-full" step="25" />
       <div class="flex justify-between px-2.5 mt-2 text-xs">
         <span>1</span>
         <span>2</span>
@@ -233,9 +238,9 @@
     </div>
 
     <!-- Interest & Activities: Night Life -->
-    <div class="separateInput w-full max-w-xs">
-      <h4 class="text-sm mb-2">Night Life</h4>
-      <input type="range" min="0" max="100" value="25" class="range range-xs" step="25" />
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Night Life</h4>
+      <input type="range" min="0" max="100" value="25" class="range range-xs w-full" step="25" />
       <div class="flex justify-between px-2.5 mt-2 text-xs">
         <span>1</span>
         <span>2</span>
@@ -246,9 +251,9 @@
     </div>
 
     <!-- Interest & Activities: Nature & Wildlife -->
-    <div class="separateInput w-full max-w-xs">
-      <h4 class="text-sm mb-2">Nature & Wildlife</h4>
-      <input type="range" min="0" max="100" value="25" class="range range-xs" step="25" />
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Nature & Wildlife</h4>
+      <input type="range" min="0" max="100" value="25" class="range range-xs w-full" step="25" />
       <div class="flex justify-between px-2.5 mt-2 text-xs">
         <span>1</span>
         <span>2</span>
@@ -259,9 +264,9 @@
     </div>
 
     <!-- Interest & Activities: Spontaneity Level -->
-    <div class="separateInput w-full max-w-xs">
-      <h4 class="text-sm mb-2">Spontaneity Level</h4>
-      <input type="range" min="0" max="100" value="25" class="range range-xs" step="25" />
+    <div class="flex-1">
+      <h4 class="text-sm mb-1.5">Spontaneity Level</h4>
+      <input type="range" min="0" max="100" value="25" class="range range-xs w-full" step="25" />
       <div class="flex justify-between px-2.5 mt-2 text-xs">
         <span>1</span>
         <span>2</span>
@@ -274,7 +279,7 @@
 
   <!-- ^ Buttons -->
   <div class="flex flex-row justify-end gap-2 my-4">
-    <button class="btn btn-sm btn-error">Cancel</button>
-    <button class="btn btn-sm btn-neutral" (click)="onUpdate($event)">Update</button>
+    <button class="btn btn-sm btn-error btn-outline">Cancel</button>
+    <button class="btn btn-sm btn-outline" (click)="onUpdate($event)">Update</button>
   </div>
 </div>

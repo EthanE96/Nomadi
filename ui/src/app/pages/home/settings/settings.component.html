@@ -1,0 +1,118 @@
+<!-- @if (errorMessage) {
+  <div class="container mx-auto w-1/2 py-3 inline">
+    <app-message [message]="errorMessage" type="error"></app-message>
+  </div>
+}
+
+@if (successMessage) {
+  <div class="container mx-auto w-1/2 py-3 inline">
+    <app-message [message]="successMessage" type="success"></app-message>
+  </div>
+} -->
+
+<div class="container mx-auto p-2 px-5">
+  <!-- Header -->
+  <div class="mb-3 pt-2 mx-1">
+    <h1 class="text-2xl font-bold">Settings</h1>
+  </div>
+
+  <!-- User Info Card -->
+  @if (user) {
+  <div class="bg-base-100 border-base-300 rounded-box shadow-md p-4 mb-6">
+    <form (ngSubmit)="onUpdateSettings()">
+      <div><p class="text-base font-semibold mb-1.5">Account</p></div>
+      <div class="flex flex-col gap-4">
+        <!-- User: Avatar and Role -->
+        <div class="flex-1 flex flex-col items-center justify-center avatar avatar-placeholder">
+          <!-- User: Avatar -->
+          <div class="bg-neutral text-neutral-content w-24 rounded-full">
+            <span class="text-4xl">
+              {{ (user.firstName.charAt(0) || "") + (user.lastName.charAt(0) || "") | uppercase }}
+            </span>
+          </div>
+          <!-- User: Privilege/Role -->
+          <span class="mt-4 badge badge-info badge-sm">
+            {{ user.role === "admin" ? "Admin" : "User" }}
+          </span>
+        </div>
+
+        <!-- User: First Name -->
+        <div class="flex-1">
+          <h4 class="text-sm mb-1.5">First Name</h4>
+          <input
+            class="input input-sm w-full"
+            type="text"
+            [(ngModel)]="user.firstName"
+            name="firstName"
+            id="firstName"
+            required
+            placeholder="First Name"
+          />
+        </div>
+
+        <!-- User: Last Name -->
+        <div class="flex-1">
+          <h4 class="text-sm mb-1.5">Last Name</h4>
+          <input
+            class="input input-sm w-full"
+            type="text"
+            [(ngModel)]="user.lastName"
+            name="lastName"
+            id="lastName"
+            required
+            placeholder="Last Name"
+          />
+        </div>
+
+        <!-- User: Email -->
+        <div class="flex-1">
+          <h4 class="text-sm mb-1.5">Email</h4>
+          <input
+            class="input input-sm w-full"
+            type="email"
+            [(ngModel)]="user.email"
+            name="email"
+            id="email"
+            required
+            placeholder="Email"
+          />
+        </div>
+
+        <div class="flex-1 mt-3 flex items-center flex-row-reverse justify-between gap-2">
+          <!-- Update Account Button, will submit data with type=submit -->
+          <button class="btn btn-sm btn-outline" type="submit">Update</button>
+
+          <div class="flex-1"></div>
+
+          <!-- Logout Button -->
+          <button class="btn btn-sm btn-error btn-outline" type="button" (click)="onLogout()">Logout</button>
+
+          <!-- Delete Account Button -->
+          <button class="btn btn-sm btn-error btn-outline" type="button" onclick="delete_account.showModal()">
+            Delete Account
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  } @else {
+  <h1 class="text-2xl font-bold text-center mt-10">No user data.</h1>
+  }
+</div>
+
+<!-- Delete Account Modal -->
+<dialog id="delete_account" class="modal">
+  <div class="modal-box">
+    <h3 class="text-base font-bold">Delete Account</h3>
+    <p class="py-2 text-xs">
+      Are you sure you want to delete your account? This action is irreversible and will remove all your data.
+    </p>
+    <div class="modal-action">
+      <form method="dialog" class="flex justify-end gap-2">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn btn-sm btn-error btn-outline">Close</button>
+        <button class="btn btn-sm btn-outline" (click)="onDeleteAccount()">Delete Account</button>
+      </form>
+    </div>
+  </div>
+</dialog>

@@ -9,6 +9,7 @@ import { ForgotPasswordComponent } from './pages/account/forgot-password/forgot-
 import { ProfileComponent } from './pages/home/profile/profile.component';
 import { TripsComponent } from './pages/home/trips/trips.component';
 import { TripDetailsComponent } from './pages/home/trips/trip-details/trip-details.component';
+import { SettingsComponent } from './pages/home/settings/settings.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -26,6 +27,7 @@ export const routes: Routes = [
       { path: 'trips', component: TripsComponent },
       { path: 'trips/details/:id', component: TripDetailsComponent },
       { path: 'profile', component: ProfileComponent },
+      { path: 'settings', component: SettingsComponent },
     ],
   },
 

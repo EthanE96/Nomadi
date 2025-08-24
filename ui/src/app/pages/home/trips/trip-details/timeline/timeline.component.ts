@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, Input, ViewChild, inject } from '@angular/core';
 import { LucideAngularModule, RotateCcw, Pencil } from 'lucide-angular';
 import { Trip, TripEvent, TripStoreService } from '../../services/trip-store.service';
 import { MessageComponent } from '../../../../../shared/message/message.component';
@@ -15,21 +15,9 @@ export class TimelineComponent {
   private tripStoreService = inject(TripStoreService);
 
   @Input() trip?: Trip;
-  @ViewChild('editModal') editModal?: ElementRef<HTMLDialogElement>;
-  @ViewChild('generateModal') generateModal?: ElementRef<HTMLDialogElement>;
   @ViewChild(MessageComponent) messageComponent?: MessageComponent;
 
   selectedEvent?: TripEvent;
-
-  onEditButton(event: TripEvent) {
-    this.selectedEvent = event;
-    this.editModal?.nativeElement.showModal();
-  }
-
-  onGenerateButton(event: TripEvent) {
-    this.selectedEvent = event;
-    this.generateModal?.nativeElement.showModal();
-  }
 
   onEditDescription(event: Event) {
     const value = (event.target as HTMLTextAreaElement).value ?? '';

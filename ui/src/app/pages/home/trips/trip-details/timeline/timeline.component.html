@@ -14,14 +14,14 @@
       <div class="flex flex-col timeline-end timeline-box text-xs ml-2 mb-3">
         <p class="flex-1">{{ event.description }}</p>
 
-        <div class="flex flex-row justify-end gap-1 mt-1">
-          <!-- Regenerate -->
-          <button class="btn btn-ghost btn-xs btn-square" (click)="onGenerateButton(event)">
+        <div class="flex justify-end gap-1 mt-1">
+          <!-- Regenerate Button -->
+          <button class="btn btn-ghost btn-xs btn-square" onclick="regenerate_button.showModal()">
             <i-lucide [img]="refreshIcon" class="icon w-3 h-3"></i-lucide>
           </button>
 
-          <!-- Edit -->
-          <button class="btn btn-ghost btn-xs btn-square" (click)="onEditButton(event)">
+          <!-- Edit Button -->
+          <button class="btn btn-ghost btn-xs btn-square" onclick="edit_button.showModal()">
             <i-lucide [img]="pencilIcon" class="icon w-3 h-3"></i-lucide>
           </button>
         </div>
@@ -33,22 +33,19 @@
 </div>
 
 <!-- Generate Modal -->
-<dialog #generateModal class="modal">
+<dialog id="regenerate_button" class="modal">
   <div class="modal-box">
     <h3 class="text-base font-bold">Regenerate</h3>
-
     <p class="py-2 text-xs">Enter additional information to regenerate plan.</p>
-
     <textarea
       placeholder="Adjust this day to be more adventurous."
       class="textarea textarea-xs placeholder:text-xs placeholder:opacity-65"
     ></textarea>
-
     <div class="modal-action">
       <form method="dialog">
-        <div class="flex flex-row justify-end gap-2">
+        <div class="flex justify-end gap-2">
           <button class="btn btn-sm btn-error btn-outline">Close</button>
-          <button class="btn btn-sm" (click)="onGenerateDescription($event)">Regenerate</button>
+          <button class="btn btn-sm btn-outline" (click)="onGenerateDescription($event)">Regenerate</button>
         </div>
       </form>
     </div>
@@ -56,19 +53,16 @@
 </dialog>
 
 <!-- Edit Modal -->
-<dialog #editModal class="modal">
+<dialog id="edit_button" class="modal">
   <div class="modal-box">
     <h3 class="text-base font-bold">Edit</h3>
-
     <p class="py-2 text-xs">Edit the trip event plan.</p>
-
     <textarea class="textarea textarea-xs" [value]="selectedEvent?.description"></textarea>
-
     <div class="modal-action">
       <form method="dialog">
-        <div class="flex flex-row justify-end gap-2">
+        <div class="flex justify-end gap-2">
           <button class="btn btn-sm btn-error btn-outline">Close</button>
-          <button class="btn btn-sm" (click)="onEditDescription($event)">Update</button>
+          <button class="btn btn-sm btn-outline" (click)="onEditDescription($event)">Update</button>
         </div>
       </form>
     </div>

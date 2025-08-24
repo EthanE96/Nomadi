@@ -1,5 +1,5 @@
 <div class="container mx-auto p-2 px-5">
-  <div class="flex items-center justify-between mb-3 pt-2">
+  <div class="flex items-center justify-between mb-3 pt-2 mx-1">
     <!-- Trips -->
     <h1 class="text-2xl font-bold">Trips</h1>
 
@@ -34,8 +34,8 @@
       </div>
 
       <!-- Description -->
-      <p class="list-col-wrap text-xs">
-        Explore the vibrant city life, iconic landmarks, and diverse cuisine of New York City.
+      <p class="list-col-wrap text-xs line-clamp-8">
+        {{ trip.description || "No description provided. Click for more details." }}
       </p>
 
       <!-- Actions -->
