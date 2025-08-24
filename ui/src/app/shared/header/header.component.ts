@@ -33,11 +33,11 @@ export class HeaderComponent {
     this.currentThemeChange.emit(this.currentTheme);
   }
 
-  onProfile() {
-    this.router.navigate(['/app/profile']);
-  }
+  // onProfile() {
+  //   this.router.navigate(['/app/profile']);
+  // }
 
   onApp() {
-    this.router.navigate(['/app']);
+    this.router.navigate(['/']);
   }
 }

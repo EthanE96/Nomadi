@@ -1,3 +1,22 @@
-<div class="text-center text-xs bg-base-100 py-1.5">
+<!-- Dock / Menu Phone -->
+<div class="dock">
+  <button [class.dock-active]="page === 'profile'" (click)="onProfile()">
+    <i-lucide [img]="profileIcon" class="icon w-4 h-4"></i-lucide>
+    <span class="dock-label">Profile</span>
+  </button>
+
+  <button [class.dock-active]="page === 'trips'" (click)="onTrips()">
+    <i-lucide [img]="tripsIcon" class="icon w-4 h-4"></i-lucide>
+    <span class="dock-label">Trips</span>
+  </button>
+
+  <button [class.dock-active]="page === 'settings'" (click)="onSettings()">
+    <i-lucide [img]="settingsIcon" class="icon w-4 h-4"></i-lucide>
+    <span class="dock-label">Settings</span>
+  </button>
+</div>
+
+<!-- Footer Laptop -->
+<div class="hidden lg:block text-center text-xs bg-base-100 py-1.5">
   <p>© Copyright 2025, Ethan Edwards. All rights reserved.</p>
 </div>
