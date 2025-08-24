@@ -25,13 +25,13 @@
         <!-- User: Avatar and Role -->
         <div class="flex-1 flex flex-col items-center justify-center avatar avatar-placeholder">
           <!-- User: Avatar -->
-          <div class="bg-neutral text-neutral-content w-24 rounded-full">
+          <div class="brand-colors w-26 rounded-full">
             <span class="text-4xl">
               {{ (user.firstName.charAt(0) || "") + (user.lastName.charAt(0) || "") | uppercase }}
             </span>
           </div>
           <!-- User: Privilege/Role -->
-          <span class="mt-4 badge badge-info badge-sm">
+          <span class="mt-4 badge badge-neutral bage-custom">
             {{ user.role === "admin" ? "Admin" : "User" }}
           </span>
         </div>

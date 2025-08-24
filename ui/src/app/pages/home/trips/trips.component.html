@@ -4,7 +4,7 @@
     <h1 class="text-2xl font-bold">Trips</h1>
 
     <!-- Create Button -->
-    <button class="btn btn-ghost btn-square" (click)="onTripCreateButton()">
+    <button class="btn btn-ghost btn-square" onclick="createModal.showModal()">
       <i-lucide [img]="plusIcon" class="icon w-5 h-5"></i-lucide>
     </button>
   </div>
@@ -22,7 +22,7 @@
     >
       <!-- Icon -->
       <div>
-        <div class="size-10 rounded-full bg-primary text-base-100 flex items-center justify-center font-bold">
+        <div class="size-10 rounded-full brand-colors flex items-center justify-center font-bold">
           {{ trip.code }}
         </div>
       </div>
@@ -71,8 +71,8 @@
   </ul>
 </div>
 
-<!-- Creation Modal -->
-<dialog #createModal class="modal">
+<!-- * Creation Modal -->
+<dialog id="createModal" class="modal">
   <div class="modal-box">
     <h3 class="text-base font-bold mb-2">Create a new trip</h3>
 
@@ -105,7 +105,7 @@
       <form method="dialog">
         <div class="flex flex-row justify-end gap-2">
           <button class="btn btn-sm btn-error btn-outline">Close</button>
-          <button class="btn btn-sm" (click)="onTripCreate($event)">Create</button>
+          <button class="btn btn-sm btn-outline" (click)="onTripCreate($event)">Create</button>
         </div>
       </form>
     </div>

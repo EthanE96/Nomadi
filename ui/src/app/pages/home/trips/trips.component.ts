@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Signal, ViewChild } from '@angular/core';
+import { Component, inject, Signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideAngularModule, Share2, Info, CirclePlus, Trash2 } from 'lucide-angular';
 import { Trip, TripStoreService } from './services/trip-store.service';
@@ -18,16 +18,11 @@ export class TripsComponent {
   private tripStore = inject(TripStoreService);
 
   @ViewChild(MessageComponent) messageComponent?: MessageComponent;
-  @ViewChild('createModal') tripCreateModal?: ElementRef<HTMLDialogElement>;
 
   trips: Signal<Trip[]> = this.tripStore.trips;
 
   onTripDetails(tripId: string) {
     this.router.navigate(['/app/trips/details', tripId]);
-  }
-
-  onTripCreateButton() {
-    this.tripCreateModal?.nativeElement.showModal();
   }
 
   onTripCreate(event: Event) {
