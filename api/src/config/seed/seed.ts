@@ -1,13 +1,11 @@
 import GlobalSettings from "../../models/global-settings.model";
 import User from "../../models/user.model";
 import Profile from "../../models/profile.model";
-import Note from "../../models/note.model";
 import { BaseService } from "../../services/base.service";
 import { getGlobalSettings } from "../../utils/global-settings-cache.utils";
 
 // Import seed data
 import { globalSettingsData } from "./data/global-settings.data";
-import { noteData } from "./data/note.data";
 import { userData } from "./data/users.data";
 import { profileData } from "./data/profile.data";
 
@@ -15,7 +13,6 @@ import { profileData } from "./data/profile.data";
 const globalSettingsService = new BaseService(GlobalSettings);
 const userService = new BaseService(User);
 const profileService = new BaseService(Profile);
-const noteService = new BaseService(Note);
 
 // Function to seed notes, users, and global settings
 export const seed = async () => {
@@ -78,20 +75,6 @@ const seedProfile = async () => {
     } else {
       const createdProfile = await profileService.create(profile);
       console.log(`Profile seeded for user ID: ${createdProfile.userId}`);
-    }
-  }
-};
-
-// Function to seed notes
-const seedNotes = async () => {
-  const existingNotes = await noteService.findAll();
-
-  for (const note of noteData) {
-    if (existingNotes.some((n) => n.title === note.title)) {
-      console.log(`Note with title "${note.title}" already exists, skipping seed.`);
-    } else {
-      const createdNote = await noteService.create(note);
-      console.log(`Note seeded: ${createdNote.title}`);
     }
   }
 };
