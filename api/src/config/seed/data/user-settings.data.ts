@@ -1,5 +1,5 @@
 // Seed data for user settings in the application
-import { IUserSettings } from "../../../models/user-settings.model";
+import { IUserSettings } from "../../../models/settings.model";
 
 // User settings data not implemented yet
 export const userSettingsData: Partial<IUserSettings>[] = [

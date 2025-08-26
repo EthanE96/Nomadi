@@ -1,6 +1,6 @@
 import GlobalSettings from "../../models/global-settings.model";
-import UserSettings from "../../models/user-settings.model";
 import User from "../../models/user.model";
+import Profile from "../../models/profile.model";
 import Note from "../../models/note.model";
 import { BaseService } from "../../services/base.service";
 import { getGlobalSettings } from "../../utils/global-settings-cache.utils";
@@ -8,13 +8,13 @@ import { getGlobalSettings } from "../../utils/global-settings-cache.utils";
 // Import seed data
 import { globalSettingsData } from "./data/global-settings.data";
 import { noteData } from "./data/note.data";
-import { userSettingsData } from "./data/user-settings.data";
 import { userData } from "./data/users.data";
+import { profileData } from "./data/profile.data";
 
 // Instantiate services
 const globalSettingsService = new BaseService(GlobalSettings);
 const userService = new BaseService(User);
-const userSettingsService = new BaseService(UserSettings);
+const profileService = new BaseService(Profile);
 const noteService = new BaseService(Note);
 
 // Function to seed notes, users, and global settings
@@ -26,8 +26,7 @@ export const seed = async () => {
 
       await seedGlobalSettings();
       await seedUsers();
-      await seedUserSettings();
-      await seedNotes();
+      await seedProfile();
       console.log("Seeding completed successfully.");
     }
   } catch (error) {
@@ -69,18 +68,16 @@ const seedUsers = async () => {
   }
 };
 
-// Function to seed user settings
-const seedUserSettings = async () => {
-  const existingSettings = await userSettingsService.findAll();
+// Function to seed profiles
+const seedProfile = async () => {
+  const existingProfiles = await profileService.findAll();
 
-  for (const setting of userSettingsData) {
-    if (existingSettings.some((s) => s.userId === setting.userId)) {
-      console.log(
-        `User settings for user ID ${setting.userId} already exist, skipping seed.`
-      );
+  for (const profile of profileData) {
+    if (existingProfiles.some((p) => p.userId === profile.userId)) {
+      console.log(`Profile for user ID ${profile.userId} already exists, skipping seed.`);
     } else {
-      const createdSetting = await userSettingsService.create(setting);
-      console.log(`User settings seeded for user ID: ${createdSetting.userId}`);
+      const createdProfile = await profileService.create(profile);
+      console.log(`Profile seeded for user ID: ${createdProfile.userId}`);
     }
   }
 };

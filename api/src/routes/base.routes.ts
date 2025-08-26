@@ -55,7 +55,7 @@ export class BaseRouter<T> {
     }
 
     if (this.routeConfig.update) {
-      this.router.put("/:id", this.controller.update);
+      this.router.patch("/:id", this.controller.update);
     }
 
     if (this.routeConfig.delete) {

@@ -81,7 +81,7 @@ export class BaseController<T> {
 
   /**
    * Update a document by ID for the authenticated user.
-   * @route PUT /:id
+   * @route PATCH /:id
    */
   public update = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);

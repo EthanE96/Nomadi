@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middleware/auth.middleware";
 import authRoutes from "./auth.routes";
+import profileRoutes from "./profile.routes";
 import noteRoutes from "./note.routes";
-import swaggerRoutes from "./swagger.routes";
+// import swaggerRoutes from "./swagger.routes";
 import userRoutes from "./user.routes";
 import { NotFoundError } from "../models/errors.model";
 
@@ -22,6 +23,8 @@ router.get("/health", (_req, res) => {
 // /api/auth (uses some public routes)
 router.use("/auth", authRoutes);
 
+router.use("/profile", isAuthenticated, profileRoutes);
+
 // /api/notes
 router.use("/notes", isAuthenticated, noteRoutes);
 
@@ -29,7 +32,7 @@ router.use("/notes", isAuthenticated, noteRoutes);
 router.use("/user", isAuthenticated, userRoutes);
 
 // /api/api-docs
-router.use("/swagger", isAuthenticated, swaggerRoutes);
+// router.use("/swagger", isAuthenticated, swaggerRoutes);
 
 //^ Error handling
 // Wildcard catch-all: forward unknown to main 404 handler as NotFoundError

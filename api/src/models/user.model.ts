@@ -7,13 +7,9 @@ export interface IUser extends Document {
   // Basic profile information
   _id: string;
   email: string;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   password: string;
-  username?: string;
-  displayName?: string;
-  middleName?: string;
-  profilePhoto?: string;
 
   // Account status and role
   isActive: boolean;
@@ -49,18 +45,9 @@ const UserSchema = new Schema<IUser>(
       trim: true,
       lowercase: true,
     },
-    username: {
-      type: String,
-      unique: true,
-      trim: true,
-    },
     password: {
       type: String,
       required: true,
-    },
-    displayName: {
-      type: String,
-      trim: true,
     },
     firstName: {
       type: String,
@@ -71,14 +58,6 @@ const UserSchema = new Schema<IUser>(
       type: String,
       trim: true,
       required: true,
-    },
-    middleName: {
-      type: String,
-      trim: true,
-    },
-    profilePhoto: {
-      type: String,
-      trim: true,
     },
 
     // Account status and role
@@ -162,9 +141,6 @@ UserSchema.methods.getPublicProfile = function (): Partial<IUser> {
     email: this.email,
     firstName: this.firstName,
     lastName: this.lastName,
-    username: this.username,
-    displayName: this.displayName,
-    profilePhoto: this.profilePhoto,
     isActive: this.isActive,
     role: this.role,
     lastLogin: this.lastLogin,
@@ -213,13 +189,9 @@ UserSchema.statics.findOrCreateFromOAuthProfile = async function (
   // Create a new user
   const newUser = new this({
     email: email,
-    username: profile.username || `${provider}_${providerId.substring(0, 8)}`,
     password: crypto.randomBytes(32).toString("hex"), // Use imported crypto
-    displayName: profile.displayName,
     firstName: profile.name?.givenName || firstName || "",
     lastName: profile.name?.familyName || lastName || "",
-    middleName: profile.name?.middleName || "",
-    profilePhoto: profile.photos?.length > 0 ? profile.photos[0].value : "",
     provider: provider,
     providerId: providerId,
     [providerIdField]: providerId,

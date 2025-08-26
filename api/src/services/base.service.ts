@@ -137,7 +137,12 @@ export class BaseService<T> {
       if (!data || Object.keys(data).length === 0) {
         throw new ValidationError("Update data cannot be empty");
       }
-      return await this.model.findByIdAndUpdate(id, data, { new: true }).exec();
+      return await this.model
+        .findByIdAndUpdate(id, data, {
+          new: true,
+          runValidators: true,
+        })
+        .exec();
     } catch (error: unknown) {
       if (error instanceof ValidationError) throw error;
 
@@ -309,7 +314,10 @@ export class BaseService<T> {
       }
 
       return await this.model
-        .findOneAndUpdate({ _id: id, userId } as FilterQuery<T>, data, { new: true })
+        .findOneAndUpdate({ _id: id, userId } as FilterQuery<T>, data, {
+          new: true,
+          runValidators: true,
+        })
         .exec();
     } catch (error: unknown) {
       if (error instanceof ValidationError) throw error;
