@@ -9,8 +9,8 @@ const baseService = new BaseService<IProfile>(Profile);
 const baseController = new BaseController<IProfile>(baseService);
 
 const baseRouter = new BaseRouter<IProfile>(baseController, {
-  getOneByUser: true,
-  updateByUser: true,
+  getOneOfUser: true,
+  updateOfUser: true,
 }).router;
 
 // Base Routes

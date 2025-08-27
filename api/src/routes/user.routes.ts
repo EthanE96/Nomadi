@@ -9,8 +9,8 @@ const baseService = new BaseService<IUser>(User);
 const baseController = new BaseController<IUser>(baseService);
 
 const baseRouter = new BaseRouter<IUser>(baseController, {
-  updateByUser: true,
-  deleteByUser: true,
+  updateOfUser: true,
+  deleteOfUser: true,
 }).router;
 
 // Base Routes

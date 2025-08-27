@@ -96,7 +96,10 @@ export class BaseService<T> {
         throw new ValidationError("Invalid user ID format");
       }
 
-      return await this.model.findOne({ userId: userId }).exec();
+      // For User model, use _id instead of userId
+      const query = this.model.modelName === "User" ? { _id: userId } : { userId: userId };
+
+      return await this.model.findOne(query).exec();
     } catch (error: unknown) {
       if (error instanceof ValidationError) throw error;
       throw new DatabaseError(`Failed to find user document`, error);
@@ -348,8 +351,11 @@ export class BaseService<T> {
         delete data._id;
       }
 
+      // For User model, use _id instead of userId
+      const query = this.model.modelName === "User" ? { _id: userId } : { userId: userId };
+
       return await this.model
-        .findOneAndUpdate({ userId: userId } as FilterQuery<T>, data, {
+        .findOneAndUpdate(query as FilterQuery<T>, data, {
           new: true,
           runValidators: true,
         })
@@ -417,7 +423,10 @@ export class BaseService<T> {
         throw new ValidationError("Invalid user ID format");
       }
 
-      return await this.model.findOneAndDelete({ userId: userId } as FilterQuery<T>).exec();
+      // For User model, use _id instead of userId
+      const query = this.model.modelName === "User" ? { _id: userId } : { userId: userId };
+
+      return await this.model.findOneAndDelete(query as FilterQuery<T>).exec();
     } catch (error: unknown) {
       if (error instanceof ValidationError) throw error;
       throw new InternalServerError(`Failed to delete user document`, error);
@@ -454,5 +463,3 @@ export class BaseService<T> {
     }
   }
 }
-
-//^ User-specific methods

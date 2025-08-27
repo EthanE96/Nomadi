@@ -11,7 +11,7 @@ interface RouteConfig {
   getAllByUser?: boolean;
   /** Enable GET /:id route for retrieving a single document by ID for the authenticated user */
   getOneByUser?: boolean;
-  /** Enable GET / route for retrieving a single document for the authenticated user */
+  /** Enable GET / route for retrieving a single document for the authenticated user (1:1)*/
   getOneOfUser?: boolean;
 
   /** Enable POST / route for creating new documents */
@@ -23,14 +23,14 @@ interface RouteConfig {
   update?: boolean;
   /** Enable PATCH /:id route for updating a document by ID for the authenticated user */
   updateByUser?: boolean;
-  /** Enable PATCH / route for updating a document for the authenticated user */
+  /** Enable PATCH / route for updating a document for the authenticated user (1:1) */
   updateOfUser?: boolean;
 
   /** Enable DELETE /:id route for deleting a document by ID */
   delete?: boolean;
   /** Enable DELETE /:id route for deleting a document by ID for the authenticated user */
   deleteByUser?: boolean;
-  /** Enable DELETE / route for deleting a document for the authenticated user */
+  /** Enable DELETE / route for deleting a document for the authenticated user (1:1) */
   deleteOfUser?: boolean;
 }
 
