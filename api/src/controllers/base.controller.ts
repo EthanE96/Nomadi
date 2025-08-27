@@ -45,8 +45,8 @@ export class BaseController<T> {
   public getAll = async (_req: Request, res: Response): Promise<void> => {
     const documents = await this.service.getAll();
 
-    if (!document) {
-      throw new NotFoundError("Document not found for the authenticated user.");
+    if (!documents) {
+      throw new NotFoundError("No documents found.");
     }
 
     res.json({ success: true, data: documents } as IApiResponse<T[]>);
@@ -93,6 +93,20 @@ export class BaseController<T> {
       throw new NotFoundError("Document not found for the authenticated user.");
     }
 
+    res.json({ success: true, data: document } as IApiResponse<T>);
+  };
+
+  /**
+   * Get a document for the authenticated user
+   * @route GET /
+   */
+  public getOneOfUser = async (req: Request, res: Response): Promise<void> => {
+    const userId = this.getUserId(req);
+    const document = await this.service.getOneOfUser(userId);
+
+    if (!document) {
+      throw new NotFoundError("Document not found for the authenticated user.");
+    }
     res.json({ success: true, data: document } as IApiResponse<T>);
   };
 
@@ -158,6 +172,20 @@ export class BaseController<T> {
     res.json({ success: true, data: document } as IApiResponse<T>);
   };
 
+  /**
+   * Update a document for the authenticated user
+   * @route PATCH /
+   */
+  public updateOfUser = async (req: Request, res: Response): Promise<void> => {
+    const userId = this.getUserId(req);
+    const document = await this.service.updateOfUser(userId, req.body);
+
+    if (!document) {
+      throw new NotFoundError("Document not found for the authenticated user.");
+    }
+    res.json({ success: true, data: document } as IApiResponse<T>);
+  };
+
   // * DELETE Methods
   /**
    * Delete a document by ID
@@ -180,6 +208,20 @@ export class BaseController<T> {
   public deleteByUser = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);
     const document = await this.service.deleteForUser(req.params.id, userId);
+
+    if (!document) {
+      throw new NotFoundError("Document not found for the authenticated user.");
+    }
+    res.json({ success: true, message: "Document deleted." } as IApiResponse<null>);
+  };
+
+  /**
+   * Delete a document for the authenticated user
+   * @route DELETE /
+   */
+  public deleteOfUser = async (req: Request, res: Response): Promise<void> => {
+    const userId = this.getUserId(req);
+    const document = await this.service.deleteOfUser(userId);
 
     if (!document) {
       throw new NotFoundError("Document not found for the authenticated user.");

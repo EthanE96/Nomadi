@@ -3,19 +3,35 @@ import { BaseController } from "../controllers/base.controller"; // Adjust path 
 
 // Configuration interface for enabling/disabling routes
 interface RouteConfig {
+  /** Enable GET / route for retrieving all documents */
   getAll?: boolean;
+  /** Enable GET /:id route for retrieving a single document by ID */
   getOne?: boolean;
+  /** Enable GET / route for retrieving all documents for the authenticated user */
   getAllByUser?: boolean;
+  /** Enable GET /:id route for retrieving a single document by ID for the authenticated user */
   getOneByUser?: boolean;
+  /** Enable GET / route for retrieving a single document for the authenticated user */
+  getOneOfUser?: boolean;
 
+  /** Enable POST / route for creating new documents */
   create?: boolean;
+  /** Enable POST / route for creating new documents for the authenticated user */
   createForUser?: boolean;
 
+  /** Enable PATCH /:id route for updating a document by ID */
   update?: boolean;
+  /** Enable PATCH /:id route for updating a document by ID for the authenticated user */
   updateByUser?: boolean;
+  /** Enable PATCH / route for updating a document for the authenticated user */
+  updateOfUser?: boolean;
 
+  /** Enable DELETE /:id route for deleting a document by ID */
   delete?: boolean;
+  /** Enable DELETE /:id route for deleting a document by ID for the authenticated user */
   deleteByUser?: boolean;
+  /** Enable DELETE / route for deleting a document for the authenticated user */
+  deleteOfUser?: boolean;
 }
 
 export class BaseRouter<T> {
@@ -38,15 +54,18 @@ export class BaseRouter<T> {
       getOne: config.getOne ?? false,
       getAllByUser: config.getAllByUser ?? false,
       getOneByUser: config.getOneByUser ?? false,
+      getOneOfUser: config.getOneOfUser ?? false,
 
       create: config.create ?? false,
       createForUser: config.createForUser ?? false,
 
       update: config.update ?? false,
       updateByUser: config.updateByUser ?? false,
+      updateOfUser: config.updateOfUser ?? false,
 
       delete: config.delete ?? false,
       deleteByUser: config.deleteByUser ?? false,
+      deleteOfUser: config.deleteOfUser ?? false,
     };
 
     this.initializeRoutes();
@@ -73,6 +92,10 @@ export class BaseRouter<T> {
       this.router.get("/:id", this.controller.getOneByUser);
     }
 
+    if (this.routeConfig.getOneOfUser) {
+      this.router.get("/", this.controller.getOneOfUser);
+    }
+
     //* Create Routes
     if (this.routeConfig.create) {
       this.router.post("/", this.controller.create);
@@ -91,6 +114,10 @@ export class BaseRouter<T> {
       this.router.patch("/:id", this.controller.updateByUser);
     }
 
+    if (this.routeConfig.updateOfUser) {
+      this.router.patch("/", this.controller.updateOfUser);
+    }
+
     //* Delete Routes
     if (this.routeConfig.delete) {
       this.router.delete("/:id", this.controller.delete);
@@ -98,6 +125,10 @@ export class BaseRouter<T> {
 
     if (this.routeConfig.deleteByUser) {
       this.router.delete("/:id", this.controller.deleteByUser);
+    }
+
+    if (this.routeConfig.deleteOfUser) {
+      this.router.delete("/", this.controller.deleteOfUser);
     }
   }
 }

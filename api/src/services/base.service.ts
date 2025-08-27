@@ -85,6 +85,24 @@ export class BaseService<T> {
     }
   }
 
+  /**
+   * Get a single document for a specific user (assumes one document per user)
+   * @param userId The user's ID
+   * @returns Promise resolving to the found document or null
+   */
+  public async getOneOfUser(userId: string): Promise<T | null> {
+    try {
+      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ValidationError("Invalid user ID format");
+      }
+
+      return await this.model.findOne({ userId: userId }).exec();
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) throw error;
+      throw new DatabaseError(`Failed to find user document`, error);
+    }
+  }
+
   // * CREATE Methods
   /**
    * Create a new document
@@ -310,6 +328,44 @@ export class BaseService<T> {
   }
 
   /**
+   * Update a document for a specific user (assumes one document per user)
+   * @param userId The user's ID
+   * @param data The update data (Mongoose update query)
+   * @returns Promise resolving to the updated document or null
+   */
+  public async updateOfUser(userId: string, data: UpdateQuery<T>): Promise<T | null> {
+    try {
+      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ValidationError("Invalid user ID format");
+      }
+
+      if (!data || Object.keys(data).length === 0) {
+        throw new ValidationError("Update data cannot be empty");
+      }
+
+      // Prevent updating _id field
+      if (data && typeof data === "object" && "_id" in data) {
+        delete data._id;
+      }
+
+      return await this.model
+        .findOneAndUpdate({ userId: userId } as FilterQuery<T>, data, {
+          new: true,
+          runValidators: true,
+        })
+        .exec();
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) throw error;
+
+      if (error instanceof Error && error.name === "ValidationError") {
+        throw new ValidationError(`Validation failed: ${error.message}`);
+      }
+
+      throw new InternalServerError(`Failed to update user document`, error);
+    }
+  }
+
+  /**
    * Delete a document by its ID
    * @param id The document ID
    * @returns Promise resolving to the deleted document or null
@@ -344,6 +400,24 @@ export class BaseService<T> {
       }
 
       return await this.model.findOneAndDelete({ _id: id, userId: userId } as FilterQuery<T>).exec();
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) throw error;
+      throw new InternalServerError(`Failed to delete user document`, error);
+    }
+  }
+
+  /**
+   * Delete a document for a specific user (assumes one document per user)
+   * @param userId The user's ID
+   * @returns Promise resolving to the deleted document or null
+   */
+  public async deleteOfUser(userId: string): Promise<T | null> {
+    try {
+      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ValidationError("Invalid user ID format");
+      }
+
+      return await this.model.findOneAndDelete({ userId: userId } as FilterQuery<T>).exec();
     } catch (error: unknown) {
       if (error instanceof ValidationError) throw error;
       throw new InternalServerError(`Failed to delete user document`, error);
