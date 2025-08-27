@@ -4,9 +4,9 @@ import { BaseController } from "../controllers/base.controller"; // Adjust path 
 // Configuration interface for enabling/disabling routes
 interface RouteConfig {
   getAll?: boolean;
-  getById?: boolean;
-  getByUser?: boolean;
+  getOne?: boolean;
   getAllByUser?: boolean;
+  getOneByUser?: boolean;
 
   create?: boolean;
   createForUser?: boolean;
@@ -35,9 +35,9 @@ export class BaseRouter<T> {
     // Default to enabling all routes if not specified
     this.routeConfig = {
       getAll: config.getAll ?? false,
-      getById: config.getById ?? false,
-      getByUser: config.getByUser ?? false,
+      getOne: config.getOne ?? false,
       getAllByUser: config.getAllByUser ?? false,
+      getOneByUser: config.getOneByUser ?? false,
 
       create: config.create ?? false,
       createForUser: config.createForUser ?? false,
@@ -61,16 +61,16 @@ export class BaseRouter<T> {
       this.router.get("/", this.controller.getAll);
     }
 
-    if (this.routeConfig.getById) {
-      this.router.get("/:id", this.controller.getById);
+    if (this.routeConfig.getOne) {
+      this.router.get("/:id", this.controller.getOne);
     }
 
     if (this.routeConfig.getAllByUser) {
       this.router.get("/", this.controller.getAllByUser);
     }
 
-    if (this.routeConfig.getByUser) {
-      this.router.get("/user/:userId", this.controller.getByUser);
+    if (this.routeConfig.getOneByUser) {
+      this.router.get("/:id", this.controller.getOneByUser);
     }
 
     //* Create Routes
@@ -79,7 +79,7 @@ export class BaseRouter<T> {
     }
 
     if (this.routeConfig.createForUser) {
-      this.router.post("/user/:userId", this.controller.createForUser);
+      this.router.post("/", this.controller.createForUser);
     }
 
     //* Update Routes
@@ -88,7 +88,7 @@ export class BaseRouter<T> {
     }
 
     if (this.routeConfig.updateByUser) {
-      this.router.patch("/user/:userId", this.controller.updateByUser);
+      this.router.patch("/:id", this.controller.updateByUser);
     }
 
     //* Delete Routes
@@ -97,7 +97,7 @@ export class BaseRouter<T> {
     }
 
     if (this.routeConfig.deleteByUser) {
-      this.router.delete("/user/:userId", this.controller.deleteByUser);
+      this.router.delete("/:id", this.controller.deleteByUser);
     }
   }
 }

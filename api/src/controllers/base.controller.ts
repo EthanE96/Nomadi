@@ -43,7 +43,7 @@ export class BaseController<T> {
    * @route GET /
    */
   public getAll = async (_req: Request, res: Response): Promise<void> => {
-    const documents = await this.service.findAll();
+    const documents = await this.service.getAll();
 
     if (!document) {
       throw new NotFoundError("Document not found for the authenticated user.");
@@ -56,8 +56,8 @@ export class BaseController<T> {
    * Get a document by ID
    * @route GET /:id
    */
-  public getById = async (req: Request, res: Response): Promise<void> => {
-    const document = await this.service.findById(req.params.id);
+  public getOne = async (req: Request, res: Response): Promise<void> => {
+    const document = await this.service.getOne(req.params.id);
 
     if (!document) {
       throw new NotFoundError("Document not found for the authenticated user.");
@@ -72,7 +72,7 @@ export class BaseController<T> {
    */
   public getAllByUser = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);
-    const documents = await this.service.findAllByUser(userId);
+    const documents = await this.service.getAllByUser(userId);
 
     if (!documents) {
       throw new NotFoundError("Document not found for the authenticated user.");
@@ -82,12 +82,12 @@ export class BaseController<T> {
   };
 
   /**
-   * Get a document by the authenticated user's ID.
-   * @route GET /
+   * Get a document by ID and a specific user
+   * @route GET /:id
    */
-  public getByUser = async (req: Request, res: Response): Promise<void> => {
+  public getOneByUser = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);
-    const document = await this.service.findByUser(userId);
+    const document = await this.service.getOneByUser(req.params.id, userId);
 
     if (!document) {
       throw new NotFoundError("Document not found for the authenticated user.");
@@ -98,7 +98,7 @@ export class BaseController<T> {
 
   // * CREATE Methods
   /**
-   * Create one or more documents for the authenticated user.
+   * Create one or more documents
    * @route POST /
    */
   public create = async (req: Request, res: Response): Promise<void> => {
@@ -113,26 +113,25 @@ export class BaseController<T> {
   };
 
   /**
-   * Create a document for a specific user (admin or system use).
-   * @route POST /user/:userId
+   * Create one or more document for a specific user
+   * @route POST /
    */
   public createForUser = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);
     let result: T | T[];
 
     if (Array.isArray(req.body)) {
-      result = await this.service.createManyForUser(req.body, userId);
+      result = await this.service.createManyForUser(userId, req.body);
     } else {
-      result = await this.service.createForUser(req.body, userId);
+      result = await this.service.createForUser(userId, req.body);
     }
 
     res.status(201).json({ success: true, data: result } as IApiResponse<T>);
   };
 
   // * UPDATE Methods
-
   /**
-   * Update a document by ID.
+   * Update a document by ID
    * @route PATCH /:id
    */
   public update = async (req: Request, res: Response): Promise<void> => {
@@ -146,12 +145,12 @@ export class BaseController<T> {
   };
 
   /**
-   * Update a document by the authenticated user.
-   * @route PATCH /
+   * Update a document by ID for a specific user
+   * @route PATCH /:id
    */
   public updateByUser = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);
-    const document = await this.service.updateForUser(userId, req.body, userId);
+    const document = await this.service.updateForUser(req.params.id, userId, req.body);
 
     if (!document) {
       throw new NotFoundError("Document not found for the authenticated user.");
@@ -160,9 +159,8 @@ export class BaseController<T> {
   };
 
   // * DELETE Methods
-
   /**
-   * Delete a document by ID.
+   * Delete a document by ID
    * @route DELETE /:id
    */
   public delete = async (req: Request, res: Response): Promise<void> => {
@@ -176,12 +174,12 @@ export class BaseController<T> {
   };
 
   /**
-   * Delete a document by the authenticated user.
-   * @route DELETE /
+   * Delete a document by ID for a specific user
+   * @route DELETE /:id
    */
   public deleteByUser = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);
-    const document = await this.service.deleteForUser(userId, userId);
+    const document = await this.service.deleteForUser(req.params.id, userId);
 
     if (!document) {
       throw new NotFoundError("Document not found for the authenticated user.");

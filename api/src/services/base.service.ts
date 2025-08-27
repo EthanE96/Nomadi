@@ -10,7 +10,7 @@ export class BaseService<T> {
   protected model: Model<T>;
 
   /**
-   * Constructs an instance of BaseService.
+   * Constructs an instance of BaseService
    * @param model Mongoose model instance
    */
   constructor(model: Model<T>) {
@@ -19,10 +19,10 @@ export class BaseService<T> {
 
   // * GET Methods
   /**
-   * Find all documents.
-   * @returns Promise resolving to an array of documents.
+   * Get all documents
+   * @returns Promise resolving to an array of documents
    */
-  public async findAll(): Promise<T[]> {
+  public async getAll(): Promise<T[]> {
     try {
       return await this.model.find().exec();
     } catch (error: unknown) {
@@ -31,11 +31,11 @@ export class BaseService<T> {
   }
 
   /**
-   * Find a document by its ID.
-   * @param id The document ID.
-   * @returns Promise resolving to the found document or null.
+   * Get a document by ID
+   * @param id The document ID
+   * @returns Promise resolving to the found document or null
    */
-  public async findById(id: string): Promise<T | null> {
+  public async getOne(id: string): Promise<T | null> {
     try {
       if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid document ID format");
@@ -49,11 +49,11 @@ export class BaseService<T> {
   }
 
   /**
-   * Find all documents belonging to a specific user.
-   * @param userId The user's ID.
-   * @returns Promise resolving to an array of documents.
+   * Get all documents for a specific user
+   * @param userId The user's ID
+   * @returns Promise resolving to an array of documents
    */
-  public async findAllByUser(userId: string): Promise<T[]> {
+  public async getAllByUser(userId: string): Promise<T[]> {
     try {
       if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid user ID format");
@@ -67,17 +67,18 @@ export class BaseService<T> {
   }
 
   /**
-   * Find a document by user.
-   * @param userId The user's ID.
-   * @returns Promise resolving to the found document or null.
+   * Get a document by ID and the authenticated user's ID
+   * @param id The document ID
+   * @param userId The user's ID
+   * @returns Promise resolving to the found document or null
    */
-  public async findByUser(userId: string): Promise<T | null> {
+  public async getOneByUser(id: string, userId: string): Promise<T | null> {
     try {
       if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid user ID format");
       }
 
-      return await this.model.findOne({ userId: userId }).exec();
+      return await this.model.findOne({ _id: id, userId: userId }).exec();
     } catch (error: unknown) {
       if (error instanceof ValidationError) throw error;
       throw new DatabaseError(`Failed to find user document`, error);
@@ -86,9 +87,9 @@ export class BaseService<T> {
 
   // * CREATE Methods
   /**
-   * Create a new document.
-   * @param data The document data.
-   * @returns Promise resolving to the created document.
+   * Create a new document
+   * @param data The document data
+   * @returns Promise resolving to the created document
    */
   public async create(data: Partial<T>): Promise<T> {
     try {
@@ -118,12 +119,12 @@ export class BaseService<T> {
     }
   }
   /**
-   * Create a document for a specific user.
-   * @param data The document data.
-   * @param userId The user's ID.
-   * @returns Promise resolving to the created document.
+   * Create a document for a specific user
+   * @param userId The user's ID
+   * @param data The document data
+   * @returns Promise resolving to the created document
    */
-  public async createForUser(data: Partial<T>, userId: string): Promise<T> {
+  public async createForUser(userId: string, data: Partial<T>): Promise<T> {
     try {
       if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid user ID format");
@@ -156,9 +157,9 @@ export class BaseService<T> {
   }
 
   /**
-   * Create multiple documents.
-   * @param data Array of document data.
-   * @returns Promise resolving to an array of created documents.
+   * Create many documents
+   * @param data Array of document data
+   * @returns Promise resolving to an array of created documents
    */
   public async createMany(data: Partial<T>[]): Promise<T[]> {
     try {
@@ -189,12 +190,12 @@ export class BaseService<T> {
   }
 
   /**
-   * Create multiple documents for a specific user.
-   * @param data Array of document data.
-   * @param userId The user's ID.
-   * @returns Promise resolving to an array of created documents.
+   * Create multiple documents for a specific user
+   * @param userId The user's ID
+   * @param data Array of document data
+   * @returns Promise resolving to an array of created documents
    */
-  public async createManyForUser(data: Partial<T>[], userId: string): Promise<T[]> {
+  public async createManyForUser(userId: string, data: Partial<T>[]): Promise<T[]> {
     try {
       if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid user ID format");
@@ -228,10 +229,10 @@ export class BaseService<T> {
 
   // * UPDATE Methods
   /**
-   * Update a document by its ID.
-   * @param id The document ID.
-   * @param data The update data (Mongoose update query).
-   * @returns Promise resolving to the updated document or null.
+   * Update a document by its ID
+   * @param id The document ID
+   * @param data The update data (Mongoose update query)
+   * @returns Promise resolving to the updated document or null
    */
   public async update(id: string, data: UpdateQuery<T>): Promise<T | null> {
     try {
@@ -266,45 +267,13 @@ export class BaseService<T> {
   }
 
   /**
-   * Delete a document by its ID.
-   * @param id The document ID.
-   * @returns Promise resolving to the deleted document or null.
+   * Update a document by ID for a specific user
+   * @param id The document ID
+   * @param userId The user's ID
+   * @param data The update data (Mongoose update query)
+   * @returns Promise resolving to the updated document or null
    */
-  public async delete(id: string): Promise<T | null> {
-    try {
-      if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
-        throw new ValidationError("Invalid document ID format");
-      }
-
-      return await this.model.findByIdAndDelete(id).exec();
-    } catch (error: unknown) {
-      if (error instanceof ValidationError) throw error;
-      throw new InternalServerError(`Failed to delete document`, error);
-    }
-  }
-
-  /**
-   * Delete all documents.
-   * @returns Promise resolving when deletion is complete.
-   */
-  public async deleteAll(): Promise<void> {
-    try {
-      await this.model.deleteMany({}).exec();
-    } catch (error: unknown) {
-      throw new DatabaseError(`Failed to delete all documents`, error);
-    }
-  }
-
-  //^ User-specific methods
-
-  /**
-   * Update a document by ID for a specific user.
-   * @param id The document ID.
-   * @param data The update data (Mongoose update query).
-   * @param userId The user's ID.
-   * @returns Promise resolving to the updated document or null.
-   */
-  public async updateForUser(id: string, data: UpdateQuery<T>, userId: string): Promise<T | null> {
+  public async updateForUser(id: string, userId: string, data: UpdateQuery<T>): Promise<T | null> {
     try {
       if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid document ID format");
@@ -324,7 +293,7 @@ export class BaseService<T> {
       }
 
       return await this.model
-        .findOneAndUpdate({ _id: id, userId } as FilterQuery<T>, data, {
+        .findOneAndUpdate({ _id: id, userId: userId } as FilterQuery<T>, data, {
           new: true,
           runValidators: true,
         })
@@ -341,8 +310,26 @@ export class BaseService<T> {
   }
 
   /**
-   * Delete a document by ID for a specific user.
-   * @param id The document ID.
+   * Delete a document by its ID
+   * @param id The document ID
+   * @returns Promise resolving to the deleted document or null
+   */
+  public async delete(id: string): Promise<T | null> {
+    try {
+      if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ValidationError("Invalid document ID format");
+      }
+
+      return await this.model.findByIdAndDelete(id).exec();
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) throw error;
+      throw new InternalServerError(`Failed to delete document`, error);
+    }
+  }
+
+  /**
+   * Delete a document by ID for a specific user
+   * @param id The document ID
    * @param userId The user's ID.
    * @returns Promise resolving to the deleted document or null.
    */
@@ -356,7 +343,7 @@ export class BaseService<T> {
         throw new ValidationError("Invalid user ID format");
       }
 
-      return await this.model.findOneAndDelete({ _id: id, userId } as FilterQuery<T>).exec();
+      return await this.model.findOneAndDelete({ _id: id, userId: userId } as FilterQuery<T>).exec();
     } catch (error: unknown) {
       if (error instanceof ValidationError) throw error;
       throw new InternalServerError(`Failed to delete user document`, error);
@@ -364,9 +351,21 @@ export class BaseService<T> {
   }
 
   /**
-   * Delete all documents for a specific user.
-   * @param userId The user's ID.
-   * @returns Promise resolving when deletion is complete.
+   * Delete all documents
+   * @returns Promise resolving when deletion is complete
+   */
+  public async deleteAll(): Promise<void> {
+    try {
+      await this.model.deleteMany({}).exec();
+    } catch (error: unknown) {
+      throw new DatabaseError(`Failed to delete all documents`, error);
+    }
+  }
+
+  /**
+   * Delete all documents for a specific user
+   * @param userId The user's ID
+   * @returns Promise resolving when deletion is complete
    */
   public async deleteAllForUser(userId: string): Promise<void> {
     try {
@@ -381,3 +380,5 @@ export class BaseService<T> {
     }
   }
 }
+
+//^ User-specific methods
