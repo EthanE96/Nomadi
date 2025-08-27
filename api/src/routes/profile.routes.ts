@@ -1,12 +1,27 @@
 import { Router } from "express";
-import { isAuthenticated } from "../middleware/auth.middleware";
-import { ProfileController } from "../controllers/profile.controller";
-import { ProfileService } from "../services/profile.service";
+// import { isAuthenticated } from "../middleware/auth.middleware";
+// import { ProfileController } from "../controllers/profile.controller";
+// import { ProfileService } from "../services/profile.service";
+import { BaseController } from "../controllers/base.controller";
+import User, { IUser } from "../models/user.model";
+import { BaseService } from "../services/base.service";
+import BaseRouter from "./base.routes";
 
 const router = Router();
-const profileController = new ProfileController(new ProfileService());
+const baseService = new BaseService<IUser>(User);
+const baseController = new BaseController<IUser>(baseService);
 
-router.get("/", isAuthenticated, profileController.profileGetById);
-router.patch("/", isAuthenticated, profileController.profileUpdateById);
+const baseRouter = new BaseRouter<IUser>(baseController, {
+  updateByUserId: true,
+  delete: true,
+}).router;
+
+// const profileController = new ProfileController(new ProfileService());
+
+// Base Routes
+router.use("/", baseRouter);
+
+// router.get("/", isAuthenticated, profileController.profileGetById);
+// router.patch("/", isAuthenticated, profileController.profileUpdateById);
 
 export default router;

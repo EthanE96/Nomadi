@@ -1,10 +1,5 @@
 import { Model, FilterQuery, UpdateQuery } from "mongoose";
-import {
-  DatabaseError,
-  ValidationError,
-  ConflictError,
-  InternalServerError,
-} from "../models/errors.model";
+import { DatabaseError, ValidationError, ConflictError, InternalServerError } from "../models/errors.model";
 
 /**
  * BaseService class that provides CRUD operations for a given Mongoose model.
@@ -22,7 +17,7 @@ export class BaseService<T> {
     this.model = model;
   }
 
-  //^ CRUD Operations
+  // * GET Methods
   /**
    * Find all documents.
    * @returns Promise resolving to an array of documents.
@@ -32,19 +27,6 @@ export class BaseService<T> {
       return await this.model.find().exec();
     } catch (error: unknown) {
       throw new DatabaseError(`Failed to fetch documents`, error);
-    }
-  }
-
-  /**
-   * Find a single document matching the query.
-   * @param query The query object (Mongoose filter).
-   * @returns Promise resolving to the found document or null.
-   */
-  public async findOne(query?: FilterQuery<T>): Promise<T | null> {
-    try {
-      return await this.model.findOne(query).exec();
-    } catch (error: unknown) {
-      throw new DatabaseError(`Failed to fetch document`, error);
     }
   }
 
@@ -67,6 +49,43 @@ export class BaseService<T> {
   }
 
   /**
+   * Find all documents belonging to a specific user.
+   * @param userId The user's ID.
+   * @returns Promise resolving to an array of documents.
+   */
+  public async findAllByUser(userId: string): Promise<T[]> {
+    try {
+      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ValidationError("Invalid user ID format");
+      }
+
+      return await this.model.find({ userId }).exec();
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) throw error;
+      throw new DatabaseError(`Failed to fetch user documents`, error);
+    }
+  }
+
+  /**
+   * Find a document by user.
+   * @param userId The user's ID.
+   * @returns Promise resolving to the found document or null.
+   */
+  public async findByUser(userId: string): Promise<T | null> {
+    try {
+      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ValidationError("Invalid user ID format");
+      }
+
+      return await this.model.findOne({ userId: userId }).exec();
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) throw error;
+      throw new DatabaseError(`Failed to find user document`, error);
+    }
+  }
+
+  // * CREATE Methods
+  /**
    * Create a new document.
    * @param data The document data.
    * @returns Promise resolving to the created document.
@@ -75,6 +94,11 @@ export class BaseService<T> {
     try {
       if (!data || Object.keys(data).length === 0) {
         throw new ValidationError("Document data cannot be empty");
+      }
+
+      // Prevent updating _id field
+      if (data && typeof data === "object" && "_id" in data) {
+        delete data._id;
       }
 
       const document = new this.model(data);
@@ -93,6 +117,43 @@ export class BaseService<T> {
       throw new InternalServerError(`Failed to create document`, error);
     }
   }
+  /**
+   * Create a document for a specific user.
+   * @param data The document data.
+   * @param userId The user's ID.
+   * @returns Promise resolving to the created document.
+   */
+  public async createForUser(data: Partial<T>, userId: string): Promise<T> {
+    try {
+      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ValidationError("Invalid user ID format");
+      }
+
+      if (!data || Object.keys(data).length === 0) {
+        throw new ValidationError("Document data cannot be empty");
+      }
+
+      // Prevent updating _id field
+      if (data && typeof data === "object" && "_id" in data) {
+        delete data._id;
+      }
+
+      const document = new this.model({ ...data, userId });
+      return (await document.save()) as T;
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) throw error;
+
+      if (error instanceof Error && error.name === "ValidationError") {
+        throw new ValidationError(`Validation failed: ${error.message}`);
+      }
+
+      if (error && typeof error === "object" && "code" in error && error.code === 11000) {
+        throw new ConflictError("Document with this data already exists for user");
+      }
+
+      throw new InternalServerError(`Failed to create user document`, error);
+    }
+  }
 
   /**
    * Create multiple documents.
@@ -103,6 +164,11 @@ export class BaseService<T> {
     try {
       if (!Array.isArray(data) || data.length === 0) {
         throw new ValidationError("Data must be a non-empty array");
+      }
+
+      // Prevent updating _id field
+      if (data && typeof data === "object" && "_id" in data) {
+        delete data._id;
       }
 
       const documents = await this.model.insertMany(data);
@@ -123,6 +189,45 @@ export class BaseService<T> {
   }
 
   /**
+   * Create multiple documents for a specific user.
+   * @param data Array of document data.
+   * @param userId The user's ID.
+   * @returns Promise resolving to an array of created documents.
+   */
+  public async createManyForUser(data: Partial<T>[], userId: string): Promise<T[]> {
+    try {
+      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ValidationError("Invalid user ID format");
+      }
+
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new ValidationError("Data must be a non-empty array");
+      }
+
+      // Prevent updating _id field
+      if (data && typeof data === "object" && "_id" in data) {
+        delete data._id;
+      }
+
+      const documents = await this.model.insertMany(data.map((d) => ({ ...d, userId })));
+      return documents as T[];
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) throw error;
+
+      if (error instanceof Error && error.name === "ValidationError") {
+        throw new ValidationError(`Validation failed: ${error.message}`);
+      }
+
+      if (error && typeof error === "object" && "code" in error && error.code === 11000) {
+        throw new ConflictError("One or more documents already exist for user");
+      }
+
+      throw new InternalServerError(`Failed to create user documents`, error);
+    }
+  }
+
+  // * UPDATE Methods
+  /**
    * Update a document by its ID.
    * @param id The document ID.
    * @param data The update data (Mongoose update query).
@@ -137,6 +242,12 @@ export class BaseService<T> {
       if (!data || Object.keys(data).length === 0) {
         throw new ValidationError("Update data cannot be empty");
       }
+
+      // Prevent updating _id field
+      if (data && typeof data === "object" && "_id" in data) {
+        delete data._id;
+      }
+
       return await this.model
         .findByIdAndUpdate(id, data, {
           new: true,
@@ -185,108 +296,6 @@ export class BaseService<T> {
   }
 
   //^ User-specific methods
-  /**
-   * Find all documents belonging to a specific user.
-   * @param userId The user's ID.
-   * @returns Promise resolving to an array of documents.
-   */
-  public async findAllByUser(userId: string): Promise<T[]> {
-    try {
-      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-        throw new ValidationError("Invalid user ID format");
-      }
-      return await this.model.find({ userId } as FilterQuery<T>).exec();
-    } catch (error: unknown) {
-      if (error instanceof ValidationError) throw error;
-      throw new DatabaseError(`Failed to fetch user documents`, error);
-    }
-  }
-
-  /**
-   * Find a document by ID and user.
-   * @param id The document ID.
-   * @param userId The user's ID.
-   * @returns Promise resolving to the found document or null.
-   */
-  public async findByIdAndUser(id: string, userId: string): Promise<T | null> {
-    try {
-      if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
-        throw new ValidationError("Invalid document ID format");
-      }
-
-      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-        throw new ValidationError("Invalid user ID format");
-      }
-      return await this.model.findOne({ _id: id, userId } as FilterQuery<T>).exec();
-    } catch (error: unknown) {
-      if (error instanceof ValidationError) throw error;
-      throw new DatabaseError(`Failed to find user document`, error);
-    }
-  }
-
-  /**
-   * Create a document for a specific user.
-   * @param data The document data.
-   * @param userId The user's ID.
-   * @returns Promise resolving to the created document.
-   */
-  public async createForUser(data: Partial<T>, userId: string): Promise<T> {
-    try {
-      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-        throw new ValidationError("Invalid user ID format");
-      }
-
-      if (!data || Object.keys(data).length === 0) {
-        throw new ValidationError("Document data cannot be empty");
-      }
-      const document = new this.model({ ...data, userId });
-      return (await document.save()) as T;
-    } catch (error: unknown) {
-      if (error instanceof ValidationError) throw error;
-
-      if (error instanceof Error && error.name === "ValidationError") {
-        throw new ValidationError(`Validation failed: ${error.message}`);
-      }
-
-      if (error && typeof error === "object" && "code" in error && error.code === 11000) {
-        throw new ConflictError("Document with this data already exists for user");
-      }
-
-      throw new InternalServerError(`Failed to create user document`, error);
-    }
-  }
-
-  /**
-   * Create multiple documents for a specific user.
-   * @param data Array of document data.
-   * @param userId The user's ID.
-   * @returns Promise resolving to an array of created documents.
-   */
-  public async createManyForUser(data: Partial<T>[], userId: string): Promise<T[]> {
-    try {
-      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-        throw new ValidationError("Invalid user ID format");
-      }
-
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new ValidationError("Data must be a non-empty array");
-      }
-      const documents = await this.model.insertMany(data.map((d) => ({ ...d, userId })));
-      return documents as T[];
-    } catch (error: unknown) {
-      if (error instanceof ValidationError) throw error;
-
-      if (error instanceof Error && error.name === "ValidationError") {
-        throw new ValidationError(`Validation failed: ${error.message}`);
-      }
-
-      if (error && typeof error === "object" && "code" in error && error.code === 11000) {
-        throw new ConflictError("One or more documents already exist for user");
-      }
-
-      throw new InternalServerError(`Failed to create user documents`, error);
-    }
-  }
 
   /**
    * Update a document by ID for a specific user.
@@ -295,11 +304,7 @@ export class BaseService<T> {
    * @param userId The user's ID.
    * @returns Promise resolving to the updated document or null.
    */
-  public async updateForUser(
-    id: string,
-    data: UpdateQuery<T>,
-    userId: string
-  ): Promise<T | null> {
+  public async updateForUser(id: string, data: UpdateQuery<T>, userId: string): Promise<T | null> {
     try {
       if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid document ID format");
@@ -311,6 +316,11 @@ export class BaseService<T> {
 
       if (!data || Object.keys(data).length === 0) {
         throw new ValidationError("Update data cannot be empty");
+      }
+
+      // Prevent updating _id field
+      if (data && typeof data === "object" && "_id" in data) {
+        delete data._id;
       }
 
       return await this.model
@@ -346,9 +356,7 @@ export class BaseService<T> {
         throw new ValidationError("Invalid user ID format");
       }
 
-      return await this.model
-        .findOneAndDelete({ _id: id, userId } as FilterQuery<T>)
-        .exec();
+      return await this.model.findOneAndDelete({ _id: id, userId } as FilterQuery<T>).exec();
     } catch (error: unknown) {
       if (error instanceof ValidationError) throw error;
       throw new InternalServerError(`Failed to delete user document`, error);
