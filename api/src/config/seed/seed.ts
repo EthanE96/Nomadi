@@ -53,7 +53,7 @@ const seedGlobalSettings = async () => {
 
 // Function to seed users
 const seedUsers = async () => {
-  const existingUsers = await userService.findAll();
+  const existingUsers = await userService.getAll();
 
   for (const user of userData) {
     if (existingUsers.some((u) => u.email === user.email)) {
@@ -67,7 +67,7 @@ const seedUsers = async () => {
 
 // Function to seed profiles
 const seedProfile = async () => {
-  const existingProfiles = await profileService.findAll();
+  const existingProfiles = await profileService.getAll();
 
   for (const profile of profileData) {
     if (existingProfiles.some((p) => p.userId === profile.userId)) {

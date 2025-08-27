@@ -23,8 +23,8 @@ export class BaseController<T> {
 
   //^ Helper Methods
   /**
-   * Extracts userId from authenticated user session and validates it.
-   * If not authenticated, throws an UnauthorizedError.
+   * Extracts userId from authenticated user session and validates it
+   * If not authenticated, throws an UnauthorizedError
    * @param req Express request object
    * @returns userId if valid, otherwise throws error
    */
@@ -82,7 +82,7 @@ export class BaseController<T> {
   };
 
   /**
-   * Get a document by ID and a specific user
+   * Get a document by ID for a specific user
    * @route GET /:id
    */
   public getOneByUser = async (req: Request, res: Response): Promise<void> => {
@@ -98,7 +98,7 @@ export class BaseController<T> {
 
   // * CREATE Methods
   /**
-   * Create one or more documents
+   * Create one or more documents for a specific user
    * @route POST /
    */
   public create = async (req: Request, res: Response): Promise<void> => {
@@ -113,7 +113,7 @@ export class BaseController<T> {
   };
 
   /**
-   * Create one or more document for a specific user
+   * Create a document for a specific user
    * @route POST /
    */
   public createForUser = async (req: Request, res: Response): Promise<void> => {

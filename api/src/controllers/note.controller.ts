@@ -13,7 +13,7 @@ export class NoteController extends BaseController<INote> {
   async summarizeNotes(req: Request, res: Response): Promise<void> {
     const userId = this.getUserId(req);
     if (!userId) return;
-    const notes = await this.noteService.findAllByUser(userId);
+    const notes = await this.noteService.getAllByUser(userId);
     const summary = await this.noteService.summarizeNotes(notes);
 
     res.json({

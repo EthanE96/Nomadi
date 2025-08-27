@@ -19,11 +19,6 @@ const baseController = new BaseController<IUser>(baseService);
 const baseRouter = new BaseRouter<IUser>(baseController, {
   update: true,
   delete: true,
-
-  getAll: false,
-  getById: false,
-  create: false,
-  deleteAll: false,
 }).router;
 
 // Base Routes

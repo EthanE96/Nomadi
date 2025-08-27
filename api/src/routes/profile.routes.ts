@@ -12,16 +12,11 @@ const baseService = new BaseService<IUser>(User);
 const baseController = new BaseController<IUser>(baseService);
 
 const baseRouter = new BaseRouter<IUser>(baseController, {
-  updateByUserId: true,
-  delete: true,
+  getOneByUser: true,
+  // updateByUser: true,
 }).router;
-
-// const profileController = new ProfileController(new ProfileService());
 
 // Base Routes
 router.use("/", baseRouter);
-
-// router.get("/", isAuthenticated, profileController.profileGetById);
-// router.patch("/", isAuthenticated, profileController.profileUpdateById);
 
 export default router;

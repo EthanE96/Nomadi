@@ -5,15 +5,13 @@ import { NoteService } from "../services/note.service";
 import BaseRouter from "./base.routes";
 
 const router = Router();
-
 const noteController = new NoteController(new NoteService());
 const baseRouter = new BaseRouter<INote>(noteController, {
   getAll: true,
-  getById: true,
+  getOne: true,
   create: true,
   update: true,
   delete: true,
-  deleteAll: false,
 }).router;
 
 // Custom Routes
