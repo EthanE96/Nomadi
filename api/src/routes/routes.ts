@@ -2,8 +2,8 @@ import { Router } from "express";
 import { isAuthenticated } from "../middleware/auth.middleware";
 import authRoutes from "./auth.routes";
 import profileRoutes from "./profile.routes";
-import noteRoutes from "./note.routes";
 import userRoutes from "./user.routes";
+import tripRoutes from "./trip.routes";
 import { NotFoundError } from "../models/errors.model";
 
 const router = Router();
@@ -22,13 +22,14 @@ router.get("/health", (_req, res) => {
 // /api/auth (uses some public routes)
 router.use("/auth", authRoutes);
 
+// /api/profile
 router.use("/profile", isAuthenticated, profileRoutes);
-
-// /api/notes
-router.use("/notes", isAuthenticated, noteRoutes);
 
 // /api/user
 router.use("/user", isAuthenticated, userRoutes);
+
+// /api/trips
+router.use("/trip", isAuthenticated, tripRoutes);
 
 //^ Error handling
 // Wildcard catch-all: forward unknown to main 404 handler as NotFoundError
