@@ -1,15 +1,9 @@
-import {
-  IProfile,
-  UserType,
-  GenderType,
-  SafetyLevel,
-  TravelExperience,
-} from "../../../models/profile.model";
+import { IProfile, UserType, GenderType, SafetyLevel, TravelExperience } from "../../../models/profile.model";
 
 export const profileData: Partial<IProfile>[] = [
+  //^ Admin user profile (001)
   {
-    _id: "100000000000000000000001",
-    userId: "000000000000000000000001", // admin user
+    userId: "000000000000000000000001",
     userType: UserType.DigitalNomad,
     age: 35,
     gender: GenderType.Male,
@@ -26,9 +20,9 @@ export const profileData: Partial<IProfile>[] = [
     nature: 4,
     spontaneity: 5,
   },
+  //^  User trips profile (002)
   {
-    _id: "100000000000000000000002",
-    userId: "000000000000000000000002", // regular user
+    userId: "000000000000000000000002",
     userType: UserType.Vacationer,
     age: 28,
     gender: GenderType.Female,

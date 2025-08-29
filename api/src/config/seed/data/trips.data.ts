@@ -1,9 +1,8 @@
 import { ITrip } from "../../../models/trips.model";
 
 export const tripsData: Partial<ITrip>[] = [
-  // Admin user trips
+  //^ Admin user trips (001)
   {
-    _id: "000000000000000000000011",
     userId: "000000000000000000000001",
     destination: "Paris, France",
     startDate: new Date("2025-09-15"),
@@ -34,7 +33,6 @@ export const tripsData: Partial<ITrip>[] = [
     updatedAt: new Date(),
   },
   {
-    _id: "000000000000000000000012",
     userId: "000000000000000000000001",
     destination: "Tokyo, Japan",
     startDate: new Date("2025-10-01"),
@@ -65,7 +63,6 @@ export const tripsData: Partial<ITrip>[] = [
     updatedAt: new Date(),
   },
   {
-    _id: "000000000000000000000013",
     userId: "000000000000000000000001",
     destination: "New York City, USA",
     startDate: new Date("2025-11-05"),
@@ -95,9 +92,8 @@ export const tripsData: Partial<ITrip>[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-  // Regular user trips
+  //^ Regular user trips (002)
   {
-    _id: "000000000000000000000021",
     userId: "000000000000000000000002",
     destination: "London, United Kingdom",
     startDate: new Date("2025-08-20"),
@@ -128,7 +124,6 @@ export const tripsData: Partial<ITrip>[] = [
     updatedAt: new Date(),
   },
   {
-    _id: "000000000000000000000022",
     userId: "000000000000000000000002",
     destination: "Sydney, Australia",
     startDate: new Date("2025-12-01"),
@@ -159,7 +154,6 @@ export const tripsData: Partial<ITrip>[] = [
     updatedAt: new Date(),
   },
   {
-    _id: "000000000000000000000023",
     userId: "000000000000000000000002",
     destination: "Barcelona, Spain",
     startDate: new Date("2026-01-10"),

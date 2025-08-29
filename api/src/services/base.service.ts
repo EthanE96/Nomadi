@@ -110,17 +110,25 @@ export class BaseService<T> {
   /**
    * Create a new document
    * @param data The document data
+   * @param checkFields Whether to prevent updating protected fields (_id, userId). Defaults to true
    * @returns Promise resolving to the created document
    */
-  public async create(data: Partial<T>): Promise<T> {
+  public async create(data: Partial<T>, checkFields: boolean = true): Promise<T> {
     try {
       if (!data || Object.keys(data).length === 0) {
         throw new ValidationError("Document data cannot be empty");
       }
 
-      // Prevent updating _id field
-      if (data && typeof data === "object" && "_id" in data) {
-        delete data._id;
+      if (checkFields) {
+        // Prevent updating _id field
+        if (data && typeof data === "object" && "_id" in data) {
+          delete data._id;
+        }
+
+        // Prevent updating userId field
+        if (data && typeof data === "object" && "userId" in data) {
+          delete data.userId;
+        }
       }
 
       const document = new this.model(data);
@@ -143,9 +151,10 @@ export class BaseService<T> {
    * Create a document for a specific user
    * @param userId The user's ID
    * @param data The document data
+   * @param checkFields Whether to prevent updating protected fields (_id, userId). Defaults to true
    * @returns Promise resolving to the created document
    */
-  public async createForUser(userId: string, data: Partial<T>): Promise<T> {
+  public async createForUser(userId: string, data: Partial<T>, checkFields: boolean = true): Promise<T> {
     try {
       if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid user ID format");
@@ -155,9 +164,16 @@ export class BaseService<T> {
         throw new ValidationError("Document data cannot be empty");
       }
 
-      // Prevent updating _id field
-      if (data && typeof data === "object" && "_id" in data) {
-        delete data._id;
+      if (checkFields) {
+        // Prevent updating _id field
+        if (data && typeof data === "object" && "_id" in data) {
+          delete data._id;
+        }
+
+        // Prevent updating userId field
+        if (data && typeof data === "object" && "userId" in data) {
+          delete data.userId;
+        }
       }
 
       const document = new this.model({ ...data, userId });
@@ -180,17 +196,25 @@ export class BaseService<T> {
   /**
    * Create many documents
    * @param data Array of document data
+   * @param checkFields Whether to prevent updating protected fields (_id, userId). Defaults to true
    * @returns Promise resolving to an array of created documents
    */
-  public async createMany(data: Partial<T>[]): Promise<T[]> {
+  public async createMany(data: Partial<T>[], checkFields: boolean = true): Promise<T[]> {
     try {
       if (!Array.isArray(data) || data.length === 0) {
         throw new ValidationError("Data must be a non-empty array");
       }
 
-      // Prevent updating _id field
-      if (data && typeof data === "object" && "_id" in data) {
-        delete data._id;
+      if (checkFields) {
+        // Prevent updating _id field
+        if (data && typeof data === "object" && "_id" in data) {
+          delete data._id;
+        }
+
+        // Prevent updating userId field
+        if (data && typeof data === "object" && "userId" in data) {
+          delete data.userId;
+        }
       }
 
       const documents = await this.model.insertMany(data);
@@ -214,9 +238,10 @@ export class BaseService<T> {
    * Create multiple documents for a specific user
    * @param userId The user's ID
    * @param data Array of document data
+   * @param checkFields Whether to prevent updating protected fields (_id, userId). Defaults to true
    * @returns Promise resolving to an array of created documents
    */
-  public async createManyForUser(userId: string, data: Partial<T>[]): Promise<T[]> {
+  public async createManyForUser(userId: string, data: Partial<T>[], checkFields: boolean = true): Promise<T[]> {
     try {
       if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid user ID format");
@@ -226,9 +251,16 @@ export class BaseService<T> {
         throw new ValidationError("Data must be a non-empty array");
       }
 
-      // Prevent updating _id field
-      if (data && typeof data === "object" && "_id" in data) {
-        delete data._id;
+      if (checkFields) {
+        // Prevent updating _id field
+        if (data && typeof data === "object" && "_id" in data) {
+          delete data._id;
+        }
+
+        // Prevent updating userId field
+        if (data && typeof data === "object" && "userId" in data) {
+          delete data.userId;
+        }
       }
 
       const documents = await this.model.insertMany(data.map((d) => ({ ...d, userId })));
@@ -253,9 +285,10 @@ export class BaseService<T> {
    * Update a document by its ID
    * @param id The document ID
    * @param data The update data (Mongoose update query)
+   * @param checkFields Whether to prevent updating protected fields (_id, userId). Defaults to true
    * @returns Promise resolving to the updated document or null
    */
-  public async update(id: string, data: UpdateQuery<T>): Promise<T | null> {
+  public async update(id: string, data: UpdateQuery<T>, checkFields: boolean = true): Promise<T | null> {
     try {
       if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid document ID format");
@@ -265,9 +298,16 @@ export class BaseService<T> {
         throw new ValidationError("Update data cannot be empty");
       }
 
-      // Prevent updating _id field
-      if (data && typeof data === "object" && "_id" in data) {
-        delete data._id;
+      if (checkFields) {
+        // Prevent updating _id field
+        if (data && typeof data === "object" && "_id" in data) {
+          delete data._id;
+        }
+
+        // Prevent updating userId field
+        if (data && typeof data === "object" && "userId" in data) {
+          delete data.userId;
+        }
       }
 
       return await this.model
@@ -292,9 +332,15 @@ export class BaseService<T> {
    * @param id The document ID
    * @param userId The user's ID
    * @param data The update data (Mongoose update query)
+   * @param checkFields Whether to prevent updating protected fields (_id, userId). Defaults to true
    * @returns Promise resolving to the updated document or null
    */
-  public async updateForUser(id: string, userId: string, data: UpdateQuery<T>): Promise<T | null> {
+  public async updateForUser(
+    id: string,
+    userId: string,
+    data: UpdateQuery<T>,
+    checkFields: boolean = true
+  ): Promise<T | null> {
     try {
       if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid document ID format");
@@ -308,9 +354,16 @@ export class BaseService<T> {
         throw new ValidationError("Update data cannot be empty");
       }
 
-      // Prevent updating _id field
-      if (data && typeof data === "object" && "_id" in data) {
-        delete data._id;
+      if (checkFields) {
+        // Prevent updating _id field
+        if (data && typeof data === "object" && "_id" in data) {
+          delete data._id;
+        }
+
+        // Prevent updating userId field
+        if (data && typeof data === "object" && "userId" in data) {
+          delete data.userId;
+        }
       }
 
       return await this.model
@@ -334,9 +387,10 @@ export class BaseService<T> {
    * Update a document for a specific user (assumes one document per user)
    * @param userId The user's ID
    * @param data The update data (Mongoose update query)
+   * @param checkFields Whether to prevent updating protected fields (_id, userId). Defaults to true
    * @returns Promise resolving to the updated document or null
    */
-  public async updateOfUser(userId: string, data: UpdateQuery<T>): Promise<T | null> {
+  public async updateOfUser(userId: string, data: UpdateQuery<T>, checkFields: boolean = true): Promise<T | null> {
     try {
       if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
         throw new ValidationError("Invalid user ID format");
@@ -346,9 +400,16 @@ export class BaseService<T> {
         throw new ValidationError("Update data cannot be empty");
       }
 
-      // Prevent updating _id field
-      if (data && typeof data === "object" && "_id" in data) {
-        delete data._id;
+      if (checkFields) {
+        // Prevent updating _id field
+        if (data && typeof data === "object" && "_id" in data) {
+          delete data._id;
+        }
+
+        // Prevent updating userId field
+        if (data && typeof data === "object" && "userId" in data) {
+          delete data.userId;
+        }
       }
 
       // For User model, use _id instead of userId

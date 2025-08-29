@@ -3,7 +3,6 @@ import { IUser } from "../../../models/user.model";
 
 export const userData: Partial<IUser>[] = [
   {
-    _id: "000000000000000000000001",
     email: "admin@example.com",
     firstName: "Admin",
     lastName: "User",
@@ -16,7 +15,6 @@ export const userData: Partial<IUser>[] = [
     updatedAt: new Date(),
   },
   {
-    _id: "000000000000000000000002",
     email: "user@example.com",
     firstName: "Regular",
     lastName: "User",

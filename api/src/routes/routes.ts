@@ -3,7 +3,7 @@ import { isAuthenticated } from "../middleware/auth.middleware";
 import authRoutes from "./auth.routes";
 import profileRoutes from "./profile.routes";
 import userRoutes from "./user.routes";
-import tripRoutes from "./trip.routes";
+import tripRoutes from "./trips.routes";
 import { NotFoundError } from "../models/errors.model";
 
 const router = Router();
