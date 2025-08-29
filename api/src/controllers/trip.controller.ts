@@ -10,5 +10,6 @@ export class TripController extends BaseController<ITrip> {
 
   async generateTripDetails(req: Request, res: Response): Promise<void> {
     res.json({ success: true, data: `Working, Trip id: ${req.params.id}` } as IApiResponse<string>);
+    // this.service.getAll();
   }
 }
