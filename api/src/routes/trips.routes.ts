@@ -8,13 +8,13 @@ const router = Router();
 const baseService = new BaseService<ITrip>(Trip);
 const baseController = new BaseController<ITrip>(baseService);
 
-const baseRouter = new BaseRouter<ITrip>(baseController, {
+const tripRouter = new BaseRouter<ITrip>(baseController, {
   getAllByUser: true,
   createForUser: true,
   deleteForUser: true,
 }).router;
 
-// Base Routes
-router.use("/", baseRouter);
+// Trip Base Routes
+router.use("/", tripRouter);
 
 export default router;

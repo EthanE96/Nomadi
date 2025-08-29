@@ -75,18 +75,23 @@ const seedProfile = async (ids: { admin: string | null; user: string | null }) =
   const existingProfiles = await profileService.getAll();
 
   for (const profile of profileData) {
-    if (existingProfiles.some((p) => p.userId === profile.userId)) {
-      console.log(`Profile for user ID ${profile.userId} already exists, skipping seed.`);
+    // Map temporary userIds to actual seeded user IDs first
+    let mappedUserId = profile.userId;
+    if (profile.userId === "000000000000000000000001" && ids.admin) {
+      mappedUserId = ids.admin;
+    } else if (profile.userId === "000000000000000000000002" && ids.user) {
+      mappedUserId = ids.user;
     } else {
-      // Map temporary userIds to actual seeded user IDs
-      if (profile.userId === "000000000000000000000001" && ids.admin) {
-        profile.userId = ids.admin;
-      } else if (profile.userId === "000000000000000000000002" && ids.user) {
-        profile.userId = ids.user;
-      } else {
-        console.log(`User ID for profile not found, skipping seed for this profile.`);
-        continue;
-      }
+      console.log(`User ID for profile not found, skipping seed for this profile.`);
+      continue;
+    }
+
+    // Check if profile already exists with the mapped userId
+    if (existingProfiles.some((p) => p.userId === mappedUserId)) {
+      console.log(`Profile for user ID ${mappedUserId} already exists, skipping seed.`);
+    } else {
+      // Update the profile object with the mapped userId
+      profile.userId = mappedUserId;
 
       const createdProfile = await profileService.create(profile, false);
       console.log(`Profile seeded for user ID: ${createdProfile.userId}`);
@@ -99,18 +104,23 @@ const seedTrips = async (ids: { admin: string | null; user: string | null }) => 
   const existingTrips = await tripService.getAll();
 
   for (const trip of tripsData) {
-    if (existingTrips.some((t) => t._id === trip._id)) {
-      console.log(`Trip with ID ${trip._id} already exists, skipping seed.`);
+    // Map temporary userIds to actual seeded user IDs first
+    let mappedUserId = trip.userId;
+    if (trip.userId === "000000000000000000000001" && ids.admin) {
+      mappedUserId = ids.admin;
+    } else if (trip.userId === "000000000000000000000002" && ids.user) {
+      mappedUserId = ids.user;
     } else {
-      // Map temporary userIds to actual seeded user IDs
-      if (trip.userId === "000000000000000000000001" && ids.admin) {
-        trip.userId = ids.admin;
-      } else if (trip.userId === "000000000000000000000002" && ids.user) {
-        trip.userId = ids.user;
-      } else {
-        console.log(`User ID for trip not found, skipping seed for this trip.`);
-        continue;
-      }
+      console.log(`User ID for trip not found, skipping seed for this trip.`);
+      continue;
+    }
+
+    // Check if trip already exists with the mapped userId and same destination
+    if (existingTrips.some((t) => t.userId === mappedUserId && t.destination === trip.destination)) {
+      console.log(`Trip to ${trip.destination} for user ID ${mappedUserId} already exists, skipping seed.`);
+    } else {
+      // Update the trip object with the mapped userId
+      trip.userId = mappedUserId;
 
       const createdTrip = await tripService.create(trip, false);
       console.log(`Trip seeded with ID: ${createdTrip._id}`);
