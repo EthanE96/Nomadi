@@ -14,7 +14,7 @@ function getAuthUrls() {
   };
 }
 
-// ^ Local Auth routes
+//^ Local Auth routes
 // Signup
 router.post("/signup", authController.signup);
 

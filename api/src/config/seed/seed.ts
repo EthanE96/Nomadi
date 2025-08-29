@@ -8,11 +8,14 @@ import { getGlobalSettings } from "../../utils/global-settings-cache.utils";
 import { globalSettingsData } from "./data/global-settings.data";
 import { userData } from "./data/users.data";
 import { profileData } from "./data/profile.data";
+import { tripsData } from "./data/trips.data";
+import Trip from "../../models/trips.model";
 
 // Instantiate services
 const globalSettingsService = new BaseService(GlobalSettings);
 const userService = new BaseService(User);
 const profileService = new BaseService(Profile);
+const tripService = new BaseService(Trip);
 
 // Function to seed notes, users, and global settings
 export const seed = async () => {
@@ -24,6 +27,7 @@ export const seed = async () => {
       await seedGlobalSettings();
       await seedUsers();
       await seedProfile();
+      await seedTrips();
       console.log("Seeding completed successfully.");
     }
   } catch (error) {
@@ -75,6 +79,19 @@ const seedProfile = async () => {
     } else {
       const createdProfile = await profileService.create(profile);
       console.log(`Profile seeded for user ID: ${createdProfile.userId}`);
+    }
+  }
+};
+
+const seedTrips = async () => {
+  const existingTrips = await tripService.getAll();
+
+  for (const trip of tripsData) {
+    if (existingTrips.some((t) => t._id === trip._id)) {
+      console.log(`Trip with ID ${trip._id} already exists, skipping seed.`);
+    } else {
+      const createdTrip = await tripService.create(trip);
+      console.log(`Trip seeded with ID: ${createdTrip._id}`);
     }
   }
 };

@@ -49,6 +49,9 @@ export interface IProfile extends Document {
   nightlife: Rating;
   nature: Rating;
   spontaneity: Rating;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 //^ Schema

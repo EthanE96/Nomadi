@@ -29,7 +29,7 @@ router.use("/profile", isAuthenticated, profileRoutes);
 router.use("/user", isAuthenticated, userRoutes);
 
 // /api/trips
-router.use("/trip", isAuthenticated, tripRoutes);
+router.use("/trips", isAuthenticated, tripRoutes);
 
 //^ Error handling
 // Wildcard catch-all: forward unknown to main 404 handler as NotFoundError
