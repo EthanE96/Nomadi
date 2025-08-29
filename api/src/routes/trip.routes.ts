@@ -11,6 +11,7 @@ const baseController = new BaseController<ITrip>(baseService);
 const baseRouter = new BaseRouter<ITrip>(baseController, {
   getAllByUser: true,
   createForUser: true,
+  deleteForUser: true,
 }).router;
 
 // Base Routes

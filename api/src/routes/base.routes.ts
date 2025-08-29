@@ -22,14 +22,14 @@ interface RouteConfig {
   /** Enable PATCH /:id route for updating a document by ID */
   update?: boolean;
   /** Enable PATCH /:id route for updating a document by ID for the authenticated user */
-  updateByUser?: boolean;
+  updateForUser?: boolean;
   /** Enable PATCH / route for updating a document for the authenticated user (1:1) */
   updateOfUser?: boolean;
 
   /** Enable DELETE /:id route for deleting a document by ID */
   delete?: boolean;
   /** Enable DELETE /:id route for deleting a document by ID for the authenticated user */
-  deleteByUser?: boolean;
+  deleteForUser?: boolean;
   /** Enable DELETE / route for deleting a document for the authenticated user (1:1) */
   deleteOfUser?: boolean;
 }
@@ -60,11 +60,11 @@ export class BaseRouter<T> {
       createForUser: config.createForUser ?? false,
 
       update: config.update ?? false,
-      updateByUser: config.updateByUser ?? false,
+      updateForUser: config.updateForUser ?? false,
       updateOfUser: config.updateOfUser ?? false,
 
       delete: config.delete ?? false,
-      deleteByUser: config.deleteByUser ?? false,
+      deleteForUser: config.deleteForUser ?? false,
       deleteOfUser: config.deleteOfUser ?? false,
     };
 
@@ -110,8 +110,8 @@ export class BaseRouter<T> {
       this.router.patch("/:id", this.controller.update);
     }
 
-    if (this.routeConfig.updateByUser) {
-      this.router.patch("/:id", this.controller.updateByUser);
+    if (this.routeConfig.updateForUser) {
+      this.router.patch("/:id", this.controller.updateForUser);
     }
 
     if (this.routeConfig.updateOfUser) {
@@ -123,8 +123,8 @@ export class BaseRouter<T> {
       this.router.delete("/:id", this.controller.delete);
     }
 
-    if (this.routeConfig.deleteByUser) {
-      this.router.delete("/:id", this.controller.deleteByUser);
+    if (this.routeConfig.deleteForUser) {
+      this.router.delete("/:id", this.controller.deleteForUser);
     }
 
     if (this.routeConfig.deleteOfUser) {

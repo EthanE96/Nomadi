@@ -162,7 +162,7 @@ export class BaseController<T> {
    * Update a document by ID for a specific user
    * @route PATCH /:id
    */
-  public updateByUser = async (req: Request, res: Response): Promise<void> => {
+  public updateForUser = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);
     const document = await this.service.updateForUser(req.params.id, userId, req.body);
 
@@ -205,7 +205,7 @@ export class BaseController<T> {
    * Delete a document by ID for a specific user
    * @route DELETE /:id
    */
-  public deleteByUser = async (req: Request, res: Response): Promise<void> => {
+  public deleteForUser = async (req: Request, res: Response): Promise<void> => {
     const userId = this.getUserId(req);
     const document = await this.service.deleteForUser(req.params.id, userId);
 
