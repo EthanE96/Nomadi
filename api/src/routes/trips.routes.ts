@@ -1,20 +1,24 @@
 import { Router } from "express";
 import Trip, { ITrip } from "../models/trips.model";
-import { BaseController } from "../controllers/base.controller";
-import { BaseService } from "../services/base.service";
 import BaseRouter from "./base.routes";
+import { TripController } from "../controllers/trip.controller";
+import { TripService } from "../services/trip.service";
 
 const router = Router();
-const baseService = new BaseService<ITrip>(Trip);
-const baseController = new BaseController<ITrip>(baseService);
-
-const tripRouter = new BaseRouter<ITrip>(baseController, {
+const tripService = new TripService(Trip);
+const tripController = new TripController(tripService);
+const baseRouter = new BaseRouter<ITrip>(tripController, {
   getAllByUser: true,
-  createForUser: true,
   deleteForUser: true,
 }).router;
 
 // Trip Base Routes
-router.use("/", tripRouter);
+router.use("/", baseRouter);
+
+// Trip Creation
+router.post("/", tripController.createTrip);
+
+// Trip Details Generation
+router.post("/:id/generate", tripController.generateTripDetails);
 
 export default router;
