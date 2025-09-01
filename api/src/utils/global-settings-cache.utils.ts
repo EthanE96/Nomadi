@@ -10,9 +10,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
  * @param forceRefresh If true, always reload from DB.
  * @returns {Promise<IGlobalSettings|null>} The global settings document or null.
  */
-export async function getGlobalSettings(
-  forceRefresh = false
-): Promise<IGlobalSettings | null> {
+export async function getGlobalSettings(forceRefresh = false): Promise<IGlobalSettings | null> {
   const now = Date.now();
   if (cachedSettings && lastLoaded && !forceRefresh && now - lastLoaded < CACHE_TTL_MS) {
     return cachedSettings;

@@ -8,4 +8,9 @@ export const globalSettingsData: Partial<IGlobalSettings> = {
     windowMinutes: 1,
     maxRequests: 20,
   },
+  aiModel: {
+    modelName: "llama-3.3-70b-versatile",
+    maxTokens: 2048,
+    temperature: 0.7,
+  },
 };

@@ -18,8 +18,9 @@ export interface ITrip {
 
 export interface ITripNodes {
   _id?: string;
-  date: Date;
+  destination: string;
   description: string;
+  date: Date;
 
   createdAt: Date;
   updatedAt: Date;
